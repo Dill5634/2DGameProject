@@ -89,8 +89,8 @@ public class Playing implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
-        viewport = new FitViewport(GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT, camera);
+        camera.setToOrtho(false, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT);
+        viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);
 
         stage = new Stage(viewport);
 

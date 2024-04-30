@@ -9,14 +9,30 @@ public class PositionComponent implements Component {
     /**
      * The x coordinate.
      */
-    public float x;
+    public static float x;
     /**
      * The y coordinate.
      */
-    public float y;
+    public static float y;
 
     public PositionComponent(float x, float y) {
-        this.x = x;
-        this.y = y;
+        PositionComponent.x = x;
+        PositionComponent.y = y;
+    }
+
+    public static float getX() {
+        return x;
+    }
+
+    public static float getY() {
+        return y;
+    }
+
+    public void setX(float x) {
+        PositionComponent.x = x;
+    }
+
+    public void setY(float y) {
+        PositionComponent.y = y;
     }
 }

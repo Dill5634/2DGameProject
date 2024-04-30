@@ -15,11 +15,15 @@ public class GameConstants {
     /**
      * The width of the camera in tiles
      */
-    public static final float CAMERA_WIDTH = 130/3.5f;
+    public static final float CAMERA_WIDTH = 130/3f;
     /**
      * The height of the camera in tiles
      */
-    public static final float CAMERA_HEIGHT = 108/3.5f;
+    public static final float CAMERA_HEIGHT = 108/3f;
+    /**
+     *  Basic Font size for playing the game
+     */
+    public static final float FONT_SIZE = 0.1f;
     /**
      * The maximum amount of energy available to the player on a single day.
      */

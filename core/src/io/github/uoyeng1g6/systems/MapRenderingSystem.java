@@ -22,6 +22,7 @@ public class MapRenderingSystem extends EntitySystem {
     @Override
     public void update(float deltaTime) {
         renderer.setView(camera);
+
         renderer.render();
     }
 }

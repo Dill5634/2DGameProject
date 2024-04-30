@@ -92,6 +92,8 @@ public class Playing implements Screen {
         camera.setToOrtho(false, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT);
         viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);
 
+        camera.update();
+
         stage = new Stage(viewport);
 
         var labelStyle = new Label.LabelStyle(game.tooltipFont, Color.BLACK);
@@ -103,11 +105,11 @@ public class Playing implements Screen {
         uiTop.center().top();
 
         var daysLabel = new Label("Monday", labelStyle);
-        daysLabel.setFontScale(0.17f);
+        daysLabel.setFontScale(GameConstants.FONT_SIZE);
         uiTop.add(daysLabel);
         uiTop.row();
         var timeLabel = new Label("07:00", labelStyle);
-        timeLabel.setFontScale(0.17f);
+        timeLabel.setFontScale(GameConstants.FONT_SIZE);
         uiTop.add(timeLabel);
 
         var counters = new Table(game.skin);
@@ -124,24 +126,24 @@ public class Playing implements Screen {
         var recreationImage = new Image(recreationIcon);
 
         var todayLabel = new Label("Today:", labelStyle);
-        todayLabel.setFontScale(0.08f);
+        todayLabel.setFontScale(GameConstants.FONT_SIZE/2);
         var totalLabel = new Label("Total:", labelStyle);
-        totalLabel.setFontScale(0.08f);
+        totalLabel.setFontScale(GameConstants.FONT_SIZE/2);
 
         var dayStudyLabel = new Label("0", labelStyle);
-        dayStudyLabel.setFontScale(0.15f);
+        dayStudyLabel.setFontScale(GameConstants.FONT_SIZE);
         var totalStudyLabel = new Label("0", labelStyle);
-        totalStudyLabel.setFontScale(0.15f);
+        totalStudyLabel.setFontScale(GameConstants.FONT_SIZE);
 
         var dayEatLabel = new Label("0", labelStyle);
-        dayEatLabel.setFontScale(0.15f);
+        dayEatLabel.setFontScale(GameConstants.FONT_SIZE);
         var totalEatLabel = new Label("0", labelStyle);
-        totalEatLabel.setFontScale(0.15f);
+        totalEatLabel.setFontScale(GameConstants.FONT_SIZE);
 
         var dayRecreationLabel = new Label("0", labelStyle);
-        dayRecreationLabel.setFontScale(0.15f);
+        dayRecreationLabel.setFontScale(GameConstants.FONT_SIZE);
         var totalRecreationLabel = new Label("0", labelStyle);
-        totalRecreationLabel.setFontScale(0.15f);
+        totalRecreationLabel.setFontScale(GameConstants.FONT_SIZE);
 
         counters.top().right();
         counters.add();
@@ -420,12 +422,26 @@ public class Playing implements Screen {
         stage.act();
         stage.draw();
 
+        boolean CameraFollowX = PositionComponent.getX() + GameConstants.CAMERA_WIDTH/2 + PlayerConstants.HITBOX_RADIUS
+                <= GameConstants.WORLD_WIDTH && PositionComponent.getX() - GameConstants.CAMERA_WIDTH/2 > 0;
+        boolean CameraFollowY = PositionComponent.getY() + GameConstants.CAMERA_WIDTH/2 + PlayerConstants.HITBOX_RADIUS
+                <= GameConstants.WORLD_WIDTH && PositionComponent.getY() - GameConstants.CAMERA_WIDTH/2 > 0;
+
+        viewport.apply();
+
+        if (CameraFollowX){ camera.position.set(PositionComponent.getX() + PlayerConstants.HITBOX_RADIUS, camera.position.y, 0);}
+        if (CameraFollowY){ camera.position.set(camera.position.x, PositionComponent.getY() + PlayerConstants.HITBOX_RADIUS, 0);}
+
+        camera.update();
+
         world.step(delta, 8, 3);
+
+
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, false);
+        viewport.update(width, height, true);
     }
 
     @Override

@@ -76,14 +76,28 @@ public class Playing implements Screen {
      */
     Box2DDebugRenderer debugRenderer = null;
 
+    CameraFollowSystem cameraFollowSystem;
+
+
     public Playing(HeslingtonHustle game) {
         this.game = game;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
-        viewport = new FitViewport(GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT, camera);
+        this.engine = new PooledEngine();
+        this.gameState = new GameState();
+        this.world = new World(new Vector2(), true);
 
+        camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
+        viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);
+        viewport.apply();
+        camera.position.set(PlayerConstants.START_POSITION.x, PlayerConstants.START_POSITION.y, 0);
         camera.update();
+
+        cameraFollowSystem = new CameraFollowSystem(gameState, camera, viewport);
+        engine.addSystem(cameraFollowSystem);
+        Entity playerEntity = initPlayerEntity(engine);
+        engine.addEntity(playerEntity);
+        cameraFollowSystem.addPlayer(playerEntity);
 
         stage = new Stage(viewport);
 
@@ -169,13 +183,7 @@ public class Playing implements Screen {
         energy.row();
         energy.add(energyAmount);
 
-        this.engine = new PooledEngine();
-        this.gameState = new GameState();
-        this.world = new World(new Vector2(), true);
-
         initTerrain(game.tiledMap, world);
-
-        engine.addEntity(initPlayerEntity(engine));
 
         for (var entity : initInteractionLocations(engine)) {
             engine.addEntity(entity);
@@ -398,18 +406,6 @@ public class Playing implements Screen {
 
         stage.act();
         stage.draw();
-
-        boolean CameraFollowX = PositionComponent.getX() + GameConstants.CAMERA_WIDTH/2 + PlayerConstants.HITBOX_RADIUS
-                <= GameConstants.WORLD_WIDTH && PositionComponent.getX() - GameConstants.CAMERA_WIDTH/2 > 0;
-        boolean CameraFollowY = PositionComponent.getY() + GameConstants.CAMERA_HEIGHT/2 + PlayerConstants.HITBOX_RADIUS
-                <= GameConstants.WORLD_HEIGHT && PositionComponent.getY() - GameConstants.CAMERA_HEIGHT/2 > 0;
-
-        viewport.apply();
-
-        if (CameraFollowX){ camera.position.set(PositionComponent.getX() + PlayerConstants.HITBOX_RADIUS, camera.position.y, 0);}
-        if (CameraFollowY){ camera.position.set(camera.position.x, PositionComponent.getY() + PlayerConstants.HITBOX_RADIUS, 0);}
-
-        camera.update();
 
         world.step(delta, 8, 3);
 

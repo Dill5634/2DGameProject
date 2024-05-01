@@ -2,19 +2,14 @@ package io.github.uoyeng1g6.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.PolylineMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.*;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Array.ArrayIterator;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import io.github.uoyeng1g6.constants.GameConstants;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Vector2;
 import io.github.uoyeng1g6.models.GameState;
 
 public class CollisionRenderingSystem extends EntitySystem {
@@ -35,29 +30,37 @@ public class CollisionRenderingSystem extends EntitySystem {
 
             if (object instanceof TextureMapObject){continue;}
 
-            Shape shape;
+            Array<Shape> shapes = new Array<>();
 
             if (object instanceof RectangleMapObject){
-                shape = getRectangle((RectangleMapObject)object);
+                shapes.add(getRectangle((RectangleMapObject)object));
             }
             else if (object instanceof PolygonMapObject){
-                shape = getPolygon((PolygonMapObject)object);
+                shapes.add(getPolygon((PolygonMapObject)object));
             }
             else if (object instanceof PolylineMapObject){
-                shape = getPolyline((PolylineMapObject)object);
+                shapes.add(getPolyline((PolylineMapObject)object));
             }
             else if (object instanceof CircleMapObject){
-                shape = getCircle((CircleMapObject)object);
+                shapes.add(getCircle((CircleMapObject)object));
+            }
+            else if (object instanceof EllipseMapObject){
+
+                //shapes.addAll(getEllipse((EllipseMapObject)object));
+
             }
             else {continue;}
 
             BodyDef bodyD = new BodyDef();
             bodyD.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyD);
-            body.createFixture(shape, 0.0f);
-
             bodies.add(body);
-            shape.dispose();
+
+            ArrayIterator<Shape> iterator = new ArrayIterator<Shape>(shapes);
+            while (iterator.hasNext()) {
+                body.createFixture(iterator.next(), 0.0f);
+            }
+            iterator.forEach(Shape::dispose);
         }
         return bodies;
     }
@@ -89,12 +92,50 @@ public class CollisionRenderingSystem extends EntitySystem {
         float[] worldVertices = new float[vertices.length];
 
         for (int i = 0; i < vertices.length; ++i) {
-            System.out.println(vertices[i]);
             worldVertices[i] = vertices[i] / ppt;
         }
 
         polygon.set(worldVertices);
         return polygon;
+    }
+
+    private static Shape[] getEllipse(EllipseMapObject ellipseObject) {
+
+        Ellipse ellipse = ellipseObject.getEllipse();
+        float innerRad;
+        float outerRad;
+
+        if (ellipse.height >= ellipse.width) {innerRad = ellipse.width; outerRad = ellipse.height;}
+        else {innerRad = ellipse.height; outerRad = ellipse.width;}
+
+        // circle part
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(innerRad);
+        circleShape.setPosition(new Vector2(ellipse.x / ppt, ellipse.y / ppt));
+
+        Shape[] result = new Shape[1];
+        result[0] = circleShape;
+        return result;
+
+        /** chain part
+        ChainShape chainShape = new ChainShape();
+        Vector2[] worldVertices = new Vector2[32];
+        int divisions = 32;
+        for (int i =0; i < divisions; i++){
+            float angle = (float)((Math.PI*2/divisions)*i);
+
+            float x = (float)(outerRad*Math.cos(angle));
+            float y = (float)(outerRad*Math.sin(angle));
+            assert false;
+            worldVertices[i] = (new Vector2(x, y));
+        }
+        chainShape.createChain(worldVertices);
+        Shape[] returnValue = new Shape[2];
+        returnValue[0] = chainShape;
+        returnValue[1] = circleShape;
+        System.out.println("chainShape: " + returnValue[0]);
+        System.out.println("circleShape: " + returnValue[1]);
+        return returnValue; */
     }
 
     private static ChainShape getPolyline(PolylineMapObject polylineObject) {
@@ -110,5 +151,6 @@ public class CollisionRenderingSystem extends EntitySystem {
         ChainShape chain = new ChainShape();
         chain.createChain(worldVertices);
         return chain;
+
     }
 }

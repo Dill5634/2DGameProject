@@ -25,6 +25,10 @@ public class GameConstants {
      */
     public static final float PIXELS_PER_TILE = 32f;
     /**
+     * Frames Per Second
+     */
+    public static final float FPS = 60;
+    /**
      *  Basic Font size for playing the game
      */
     public static final float FONT_SIZE = 0.1f;

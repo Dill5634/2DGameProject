@@ -31,10 +31,14 @@ public class PlayerInputSystem extends EntitySystem {
 
     private final Vector2 velocity = new Vector2();
 
+    private final Vector2 posistion = new Vector2();
+
     private Entity playerEntity;
 
     public PlayerInputSystem(GameState gameState) {
+
         this.gameState = gameState;
+        posistion.set(PlayerConstants.START_POSITION);
     }
 
     @Override

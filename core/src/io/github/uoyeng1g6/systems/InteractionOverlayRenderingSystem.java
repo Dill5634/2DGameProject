@@ -63,25 +63,29 @@ public class InteractionOverlayRenderingSystem extends EntitySystem {
         } else {
             elapsed += deltaTime;
         }
+        System.out.println(gameState.interactionOverlay.position);
+        var pos = gameState.interactionOverlay.position;
 
-        shapeDrawer.filledRectangle(0, 0, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT, OVERLAY_COLOR);
 
-        var halfWorldWidth = (float) GameConstants.WORLD_WIDTH / 2;
-        var halfWorldHeight = (float) GameConstants.WORLD_HEIGHT / 2;
+        var halfWorldWidth = (float) GameConstants.CAMERA_WIDTH / 2;
+        var halfWorldHeight = (float) GameConstants.CAMERA_HEIGHT / 2;
+        var zeroX = pos.x-halfWorldWidth;
+        var zeroY = pos.y-halfWorldHeight;
+        shapeDrawer.filledRectangle(zeroX,zeroY , GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, OVERLAY_COLOR);
 
         var layout = new GlyphLayout(font, gameState.interactionOverlay.text);
-        font.draw(batch, layout, halfWorldWidth - (layout.width / 2), halfWorldHeight + (layout.height / 2));
+        font.draw(batch, layout,zeroX+ halfWorldWidth - (layout.width / 2), zeroY+ halfWorldHeight + (layout.height / 2));
 
         shapeDrawer.filledRectangle(
-                halfWorldWidth - (halfWorldWidth / 2) - 0.5f,
-                (halfWorldHeight / 2),
+                zeroX +halfWorldWidth - (halfWorldWidth / 2) - 0.5f,
+                zeroY+(halfWorldHeight / 2),
                 halfWorldWidth + 1,
                 3,
                 Color.BLACK);
 
         var progressBarSize = (elapsed / gameState.interactionOverlay.displayFor) * halfWorldWidth;
         shapeDrawer.filledRectangle(
-                halfWorldWidth - (halfWorldWidth / 2), (halfWorldHeight / 2) + 0.5f, progressBarSize, 2, Color.WHITE);
+                zeroX+ halfWorldWidth - (halfWorldWidth / 2), zeroY+(halfWorldHeight / 2) + 0.5f, progressBarSize, 2, Color.WHITE);
 
         if (elapsed >= gameState.interactionOverlay.displayFor) {
             gameState.interactionOverlay = null;

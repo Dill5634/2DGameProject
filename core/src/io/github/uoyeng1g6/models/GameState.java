@@ -1,5 +1,6 @@
 package io.github.uoyeng1g6.models;
 
+import com.badlogic.gdx.math.Vector2;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
 import java.util.ArrayList;
@@ -42,9 +43,12 @@ public class GameState {
          */
         public final float displayFor;
 
-        public InteractionOverlay(String text, float displayFor) {
+        public  final Vector2 position;
+
+        public InteractionOverlay(String text, float displayFor,Vector2 position) {
             this.text = text;
             this.displayFor = displayFor;
+            this.position = position;
         }
     }
 
@@ -87,7 +91,7 @@ public class GameState {
         days.add(currentDay);
         currentDay = new Day();
 
-        interactionOverlay = new InteractionOverlay("Sleeping...", 5);
+        interactionOverlay = new InteractionOverlay("Sleeping...", 5,new Vector2(0,0));
     }
 
     /**
@@ -101,7 +105,7 @@ public class GameState {
      * @param overlayText the text to show on the overlay while doing the interaction.
      * @return boolean indicating whether the activity could be performed.
      */
-    public boolean doActivity(int timeUsage, int energyUsage, ActivityType type, String overlayText) {
+    public boolean doActivity(int timeUsage, int energyUsage, ActivityType type, String overlayText, Vector2 pos) {
         if (hoursRemaining < timeUsage || energyRemaining < energyUsage) {
             return false;
         }
@@ -110,7 +114,7 @@ public class GameState {
         energyRemaining -= energyUsage;
         currentDay.activityStats.merge(type, 1, Integer::sum);
 
-        interactionOverlay = new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage);
+        interactionOverlay = new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage,pos);
 
         return true;
     }

@@ -283,15 +283,16 @@ public class Playing implements Screen {
      */
     Entity[] initInteractionLocations(Engine engine) {
         final var iconSize = 2 / 64f;
+        var ref = engine.getSystem(cameraFollowSystem.getClass());
 
         var studyIcon = game.interactionIconsTextureAtlas.findRegion("book_icon");
         var study = engine.createEntity()
                 .add(new TextureComponent(studyIcon, iconSize).show())
-                .add(new PositionComponent(25, 14))
+                .add(new PositionComponent(30, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        25, 14, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
+                        30, 82, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.STUDY, "Studying...")) {
+                    if (!state.doActivity(1, 10, ActivityType.STUDY, "Studying...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -304,7 +305,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         54, 2.5f, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 5, ActivityType.MEAL, "Eating...")) {
+                    if (!state.doActivity(1, 5, ActivityType.MEAL, "Eating...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -320,7 +321,7 @@ public class Playing implements Screen {
                         popcornIcon.getRegionWidth() * iconSize,
                         popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.RECREATION, "Watching films...")) {
+                    if (!state.doActivity(1, 10, ActivityType.RECREATION, "Watching films...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))

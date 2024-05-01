@@ -2,6 +2,7 @@ package io.github.uoyeng1g6.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.uoyeng1g6.components.*;
@@ -60,5 +61,10 @@ public class CameraFollowSystem extends EntitySystem {
 
         for(Table t : this.tables){t.setPosition(camera.position.x - GameConstants.CAMERA_WIDTH/2,
                                                     camera.position.y - GameConstants.CAMERA_HEIGHT/2);}
+    }
+
+    public Vector2 getCameraPosition(){
+        return new Vector2(camera.position.x,camera.position.y);
+
     }
 }

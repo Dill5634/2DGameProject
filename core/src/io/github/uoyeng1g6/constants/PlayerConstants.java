@@ -17,5 +17,5 @@ public class PlayerConstants {
     /**
      * The starting position of the player.
      */
-    public static final Vector2 START_POSITION = new Vector2(9, 28);
+    public static final Vector2 START_POSITION = new Vector2(9, 82);
 }

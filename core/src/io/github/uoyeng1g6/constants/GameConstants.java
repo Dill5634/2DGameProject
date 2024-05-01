@@ -21,6 +21,10 @@ public class GameConstants {
      */
     public static final float CAMERA_HEIGHT = 108/3f;
     /**
+     * The pixels per tile
+     */
+    public static final float PIXELS_PER_TILE = 32f;
+    /**
      *  Basic Font size for playing the game
      */
     public static final float FONT_SIZE = 0.1f;

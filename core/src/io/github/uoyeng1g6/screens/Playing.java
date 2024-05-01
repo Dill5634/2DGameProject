@@ -9,18 +9,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -41,15 +39,8 @@ import io.github.uoyeng1g6.constants.MoveDirection;
 import io.github.uoyeng1g6.constants.PlayerConstants;
 import io.github.uoyeng1g6.models.GameState;
 import io.github.uoyeng1g6.models.PhysicsPolygon;
-import io.github.uoyeng1g6.systems.AnimationSystem;
-import io.github.uoyeng1g6.systems.CounterUpdateSystem;
-import io.github.uoyeng1g6.systems.DebugSystem;
-import io.github.uoyeng1g6.systems.InteractionOverlayRenderingSystem;
-import io.github.uoyeng1g6.systems.MapRenderingSystem;
-import io.github.uoyeng1g6.systems.PlayerInputSystem;
-import io.github.uoyeng1g6.systems.PlayerInteractionSystem;
-import io.github.uoyeng1g6.systems.StaticRenderingSystem;
-import io.github.uoyeng1g6.systems.TooltipRenderingSystem;
+import io.github.uoyeng1g6.systems.*;
+
 import java.util.Map;
 
 /**
@@ -89,8 +80,8 @@ public class Playing implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT);
-        viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);
+        camera.setToOrtho(false, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
+        viewport = new FitViewport(GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT, camera);
 
         camera.update();
 
@@ -182,7 +173,7 @@ public class Playing implements Screen {
         this.gameState = new GameState();
         this.world = new World(new Vector2(), true);
 
-        initTerrain();
+        initTerrain(game.tiledMap, world);
 
         engine.addEntity(initPlayerEntity(engine));
 
@@ -242,6 +233,7 @@ public class Playing implements Screen {
         engine.addSystem(new AnimationSystem(game.spriteBatch, gameState));
         engine.addSystem(new TooltipRenderingSystem(game.tooltipFont, game.shapeDrawer, game.spriteBatch, gameState));
         engine.addSystem(new CounterUpdateSystem(gameState));
+        engine.addSystem(new CollisionRenderingSystem(gameState));
         if (game.debug) {
             engine.addSystem(new DebugSystem(game.shapeDrawer));
         }
@@ -263,25 +255,10 @@ public class Playing implements Screen {
     }
 
     /**
-     * Load the terrain polygons from the data json file and create them in the box2d world.
+     * Load collsion objects from map and create them in the box2d world.
      */
-    void initTerrain() {
-        var json = new Json();
-        var objects = json.fromJson(PhysicsPolygon[].class, Gdx.files.internal("terrain.json"));
-
-        for (var object : objects) {
-            var bodyDef = new BodyDef();
-            bodyDef.type = object.getType();
-            bodyDef.position.set(object.getPosition());
-
-            var body = world.createBody(bodyDef);
-            var shape = new PolygonShape();
-            shape.set(object.getVertices());
-
-            // We know that these will always be static bodies so will always have a density of 0
-            body.createFixture(shape, 0f);
-            shape.dispose();
-        }
+    void initTerrain(TiledMap map, World world) {
+        Array<Body> bodies = CollisionRenderingSystem.RenderCollisionBodies(map, world);
     }
 
     /**
@@ -424,8 +401,8 @@ public class Playing implements Screen {
 
         boolean CameraFollowX = PositionComponent.getX() + GameConstants.CAMERA_WIDTH/2 + PlayerConstants.HITBOX_RADIUS
                 <= GameConstants.WORLD_WIDTH && PositionComponent.getX() - GameConstants.CAMERA_WIDTH/2 > 0;
-        boolean CameraFollowY = PositionComponent.getY() + GameConstants.CAMERA_WIDTH/2 + PlayerConstants.HITBOX_RADIUS
-                <= GameConstants.WORLD_WIDTH && PositionComponent.getY() - GameConstants.CAMERA_WIDTH/2 > 0;
+        boolean CameraFollowY = PositionComponent.getY() + GameConstants.CAMERA_HEIGHT/2 + PlayerConstants.HITBOX_RADIUS
+                <= GameConstants.WORLD_HEIGHT && PositionComponent.getY() - GameConstants.CAMERA_HEIGHT/2 > 0;
 
         viewport.apply();
 

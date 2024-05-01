@@ -63,7 +63,7 @@ public class InteractionOverlayRenderingSystem extends EntitySystem {
         } else {
             elapsed += deltaTime;
         }
-        System.out.println(gameState.interactionOverlay.position);
+
         var pos = gameState.interactionOverlay.position;
 
 

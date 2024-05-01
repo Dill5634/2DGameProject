@@ -330,10 +330,11 @@ public class Playing implements Screen {
         var sleepIcon = game.interactionIconsTextureAtlas.findRegion("bed_icon");
         var sleep = engine.createEntity()
                 .add(new TextureComponent(sleepIcon, iconSize).show())
-                .add(new PositionComponent(3.5f, 26.5f))
+                .add(new PositionComponent(9, 82f))
                 .add(new HitboxComponent(new Rectangle(
-                        3.5f, 26.5f, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))
-                .add(new InteractionComponent(GameState::advanceDay))
+                        9, 82, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> this.gameState.advanceDay(ref.getCameraPosition())))
+                //.add(new InteractionComponent(GameState::advanceDay))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Go to sleep\nEnds the current day"));
 
         return new Entity[] {study, food, recreation, sleep};

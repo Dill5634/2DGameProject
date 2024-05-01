@@ -83,7 +83,7 @@ public class GameState {
      * End and store the current day and advance to a new one. Resets the current energy and hours remaining.
      * Shows an overlay to indicate that the player is "sleeping".
      */
-    public void advanceDay() {
+    public void advanceDay(Vector2 camPosition) {
         daysRemaining--;
         energyRemaining = GameConstants.MAX_ENERGY;
         hoursRemaining = GameConstants.MAX_HOURS;
@@ -91,7 +91,7 @@ public class GameState {
         days.add(currentDay);
         currentDay = new Day();
 
-        interactionOverlay = new InteractionOverlay("Sleeping...", 5,new Vector2(0,0));
+      interactionOverlay = new InteractionOverlay("Sleeping...", 3,camPosition);
     }
 
     /**

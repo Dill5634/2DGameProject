@@ -87,7 +87,7 @@ public class Playing implements Screen {
         this.world = new World(new Vector2(), true);
 
         camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, GameConstants.WORLD_WIDTH, GameConstants.WORLD_HEIGHT);
+        this.camera.setToOrtho(false, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT);
         viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);
         viewport.apply();
         camera.position.set(PlayerConstants.START_POSITION.x, PlayerConstants.START_POSITION.y, 0);
@@ -174,14 +174,20 @@ public class Playing implements Screen {
         stage.addActor(energy);
 
         var energyLabel = new Label("Energy Remaining:", labelStyle);
-        energyLabel.setFontScale(0.08f);
+        energyLabel.setFontScale(GameConstants.FONT_SIZE);
         var energyAmount = new Label(String.valueOf(GameConstants.MAX_ENERGY), labelStyle);
-        energyAmount.setFontScale(0.15f);
+        energyAmount.setFontScale(GameConstants.FONT_SIZE);
 
         energy.top().left();
         energy.add(energyLabel);
         energy.row();
         energy.add(energyAmount);
+
+        Table[] tables = new Table[3];
+        tables[0] = uiTop;
+        tables[1] = counters;
+        tables[2] = energy;
+        cameraFollowSystem.addTables(tables);
 
         initTerrain(game.tiledMap, world);
 

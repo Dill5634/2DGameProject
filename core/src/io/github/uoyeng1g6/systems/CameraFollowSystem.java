@@ -2,6 +2,7 @@ package io.github.uoyeng1g6.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.uoyeng1g6.components.*;
 import io.github.uoyeng1g6.constants.GameConstants;
@@ -17,6 +18,7 @@ public class CameraFollowSystem extends EntitySystem {
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private Entity playerEntity;
+    private Table[] tables;
 
     public CameraFollowSystem(GameState gameState, OrthographicCamera camera, Viewport viewport) {
         this.gameState = gameState;
@@ -27,6 +29,10 @@ public class CameraFollowSystem extends EntitySystem {
 
     public void addPlayer(Entity playerEntity) {
         this.playerEntity = playerEntity;
+    }
+
+    public void addTables(Table[] tables){
+        this.tables = tables;
     }
 
     public void update(float deltaTime) {
@@ -51,6 +57,8 @@ public class CameraFollowSystem extends EntitySystem {
         if (CameraFollowY){ camera.position.set(camera.position.x, y + PlayerConstants.HITBOX_RADIUS, 0);}
 
         camera.update();
-        //System.out.println("FOLLOW " + x + " " + y + " " + camera.position.x + " " + camera.position.y);
+
+        for(Table t : this.tables){t.setPosition(camera.position.x - GameConstants.CAMERA_WIDTH/2,
+                                                    camera.position.y - GameConstants.CAMERA_HEIGHT/2);}
     }
 }

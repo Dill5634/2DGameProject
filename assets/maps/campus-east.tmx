@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="130" height="108" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="145">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="130" height="108" tilewidth="32" tileheight="32" infinite="0" nextlayerid="19" nextobjectid="150">
  <tileset firstgid="1" source="bricks.tsx"/>
  <tileset firstgid="2049" source="victorian-tenement.tsx"/>
  <tileset firstgid="5121" source="roofs.tsx"/>
@@ -161,6 +161,18 @@
   </object>
   <object id="144" x="498" y="3014">
    <polygon points="0,0 68,74 116,78 132,104 176,110 380,426 -500,442 -496,4"/>
+  </object>
+  <object id="146" x="0" y="0">
+   <polygon points="0,0 -3.0303,1830.3 -318.182,1827.27"/>
+  </object>
+  <object id="147" x="-3.0303" y="0">
+   <polygon points="0,0 4171.03,0 2359.03,-1008"/>
+  </object>
+  <object id="148" x="4160" y="32">
+   <polygon points="0,0 0,3420 1184,1644"/>
+  </object>
+  <object id="149" x="0" y="3454.55">
+   <polygon points="0,0 4160,2.78788 2240,1569.45"/>
   </object>
  </objectgroup>
 </map>

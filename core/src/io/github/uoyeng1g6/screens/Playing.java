@@ -292,7 +292,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         30, 82, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.STUDY, "Studying...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 10, ActivityType.STUDY, "Studying...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -301,11 +301,11 @@ public class Playing implements Screen {
         var foodIcon = game.interactionIconsTextureAtlas.findRegion("food_icon");
         var food = engine.createEntity()
                 .add(new TextureComponent(foodIcon, iconSize).show())
-                .add(new PositionComponent(54, 2.5f))
+                .add(new PositionComponent(25, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        54, 2.5f, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
+                        25, 82, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 5, ActivityType.MEAL, "Eating...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 5, ActivityType.MEAL, "Eating...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -314,18 +314,34 @@ public class Playing implements Screen {
         var popcornIcon = game.interactionIconsTextureAtlas.findRegion("popcorn_icon");
         var recreation = engine.createEntity()
                 .add(new TextureComponent(popcornIcon, iconSize).show())
-                .add(new PositionComponent(53.5f, 26.5f))
+                .add(new PositionComponent(35, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        53.5f,
-                        26.5f,
+                        35,
+                        82,
                         popcornIcon.getRegionWidth() * iconSize,
                         popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.RECREATION, "Watching films...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 10, ActivityType.RECREATION, "Watching films...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Watch films with mates\nTime: -1h\nEnergy: -10"));
+
+        var ducks = engine.createEntity()
+                .add(new TextureComponent(popcornIcon, iconSize).show())
+                .add(new PositionComponent(16, 16))
+                .add(new HitboxComponent(new Rectangle(
+                        16,
+                        16,
+                        popcornIcon.getRegionWidth() * iconSize,
+                        popcornIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> {
+                    if (!state.doActivity(0, 10, ActivityType.DUCKS, "Feeding ducks...",ref.getCameraPosition())) {
+                        // Notify insufficient time/energy
+                    }
+                }))
+                .add(new TooltipComponent(game.tooltipFont, "[E] Feed the ducks\nTime: -1h\nEnergy: -10"));
+
 
         var sleepIcon = game.interactionIconsTextureAtlas.findRegion("bed_icon");
         var sleep = engine.createEntity()
@@ -337,7 +353,7 @@ public class Playing implements Screen {
                 //.add(new InteractionComponent(GameState::advanceDay))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Go to sleep\nEnds the current day"));
 
-        return new Entity[] {study, food, recreation, sleep};
+        return new Entity[] {study, food, recreation,ducks, sleep};
     }
 
     /**

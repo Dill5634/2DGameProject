@@ -3,6 +3,8 @@ package io.github.uoyeng1g6.models;
 import com.badlogic.gdx.math.Vector2;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
+
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -11,6 +13,8 @@ import java.util.HashMap;
  * Dataclass representing the game state.
  */
 public class GameState {
+
+
     /**
      * Dataclass representing a single in-game day.
      */
@@ -20,6 +24,7 @@ public class GameState {
          */
         public final HashMap<ActivityType, Integer> activityStats = new HashMap<>();
         public final HashMap<EnumSet<ActivityType>, Integer> setStats = new HashMap<>();
+
         /**
          * Get the number of times an activity of a specific type has been done.
          *
@@ -84,20 +89,32 @@ public class GameState {
      */
     public InteractionOverlay interactionOverlay = null;
 
+    public Boolean[] streaks = {true,true,true,true};
+    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.STUDY,ActivityType.MEAL};
+
     /**
      * End and store the current day and advance to a new one. Resets the current energy and hours remaining.
      * Shows an overlay to indicate that the player is "sleeping".
      */
     public void advanceDay(Vector2 camPosition) {
+        for(int x = 0;x<4;x++){
+            if(this.streaks[x]) this.streaks[x] = currentDay.statFor(counts[x]) > 0;
+            }
+
+
+
+
         daysRemaining--;
         energyRemaining = GameConstants.MAX_ENERGY;
         hoursRemaining = GameConstants.MAX_HOURS;
-        System.out.println(currentDay.setStats.get(ActivityType.WORK));
+   //     System.out.println(currentDay.statFor(ActivityType.STUDY));
         days.add(currentDay);
         currentDay = new Day();
 
 
-      interactionOverlay = new InteractionOverlay("Sleeping...", 3,camPosition);
+
+
+      interactionOverlay = new InteractionOverlay("Sleeping...", 0,camPosition);
     }
 
     /**
@@ -118,7 +135,7 @@ public class GameState {
 
         hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
-      //  currentDay.activityStats.merge(type, 1, Integer::sum);
+       currentDay.activityStats.merge(type, 1, Integer::sum);
 
 
         if(ActivityType.WORK.contains(type)){
@@ -142,9 +159,7 @@ public class GameState {
      * @param type the type of activity to get the total for.
      * @return the total number of activities of that type done.
      */
-    public int getTotalActivityCount(ActivityType type) {
-        return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
-    }
+
     public int getTotalActivityCount(EnumSet<ActivityType> type) {
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }

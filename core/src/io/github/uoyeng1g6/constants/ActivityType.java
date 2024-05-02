@@ -8,9 +8,12 @@ import java.util.EnumSet;
 public enum ActivityType {
     MEAL,
     STUDY,
-    RECREATION;
+    RECREATION,
+    DUCKS,
+    WALK
+    ;
 
     public static final EnumSet<ActivityType> EAT = EnumSet.of(MEAL);
     public static final EnumSet<ActivityType> WORK = EnumSet.of(STUDY);
-    public static final EnumSet<ActivityType> PLAY = EnumSet.of(RECREATION);
+    public static final EnumSet<ActivityType> PLAY = EnumSet.of(RECREATION,DUCKS,WALK);
     }

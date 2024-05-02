@@ -55,7 +55,7 @@ public class EndScreen implements Screen {
 
         var inner = new Table(game.skin);
 
-        inner.add(String.format("Exam Score: %.2f / 100", calculateExamScore(endGameState.days)))
+        inner.add(String.format("Exam Score: %.2f / 100", calculateExamScore(endGameState)))
                 .padBottom(50);
         inner.row();
         inner.add("Times Studied: " + endGameState.getTotalActivityCount(ActivityType.WORK));
@@ -73,6 +73,7 @@ public class EndScreen implements Screen {
                 .height(Value.percentHeight(0.1f, inner));
 
         root.add(inner).grow();
+        System.out.println(endGameState.streaks[2]);
     }
 
     /**
@@ -94,14 +95,14 @@ public class EndScreen implements Screen {
         // Calculate meal multiplier
         float mealMultiplier = 1;
         for (var i = 1; i <= mealCount; i++) {
-            mealMultiplier += i <= 3 ? 0.15f : -0.025f;
+            mealMultiplier += i <= 3 ? 0.09f : -0.025f;
         }
         mealMultiplier = Math.max(1, mealMultiplier);
 
         // Calculate recreation multiplier
         float recreationMultiplier = 1;
         for (var i = 1; i <= recreationCount; i++) {
-            recreationMultiplier += i <= 3 ? 0.15f : -0.025f;
+            recreationMultiplier += i <= 3 ? 0.09f : -0.025f;
         }
         recreationMultiplier = Math.max(1, recreationMultiplier);
 
@@ -115,7 +116,8 @@ public class EndScreen implements Screen {
      * @param days the days to calculate the score for.
      * @return the computed game score.
      */
-    float calculateExamScore(List<GameState.Day> days) {
+    float calculateExamScore(GameState state) {
+        List<GameState.Day>days  = state.days;
         float totalScore = 0;
 
         for (var day : days) {
@@ -130,6 +132,10 @@ public class EndScreen implements Screen {
             // Increase total score
             totalScore += (float) (normalisedDayScore * (1 / 7f));
         }
+
+       // for(int x =0;x<4;x++){
+        //     totalScore += state.streaks[x] ? 5 : 0;
+      //  }
 
         // Clamp total score from 0-100
         return Math.min(100, Math.max(0, totalScore));

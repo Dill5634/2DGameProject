@@ -89,15 +89,15 @@ public class GameState {
      */
     public InteractionOverlay interactionOverlay = null;
 
-    public Boolean[] streaks = {true,true,true,true};
-    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.LIBRARY,ActivityType.SPOONS};
+    public Boolean[] streaks = {true,true,true,true,true};
+    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.LIBRARY,ActivityType.SPOONS,ActivityType.BREAKFAST};
 
     /**
      * End and store the current day and advance to a new one. Resets the current energy and hours remaining.
      * Shows an overlay to indicate that the player is "sleeping".
      */
     public void advanceDay(Vector2 camPosition) {
-        for(int x = 0;x<4;x++){
+        for(int x = 0;x<5;x++){
             if(this.streaks[x]) this.streaks[x] = currentDay.statFor(counts[x]) > 0;
             }
 

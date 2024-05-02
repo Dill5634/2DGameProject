@@ -58,7 +58,7 @@ public class EndScreen implements Screen {
         if(endGameState.streaks[1])streakMessage+="   WALKER   ";
         if(endGameState.streaks[2])streakMessage+="   BOOKWORM   ";
         if(endGameState.streaks[3])streakMessage+="   ALCOHOLIC   ";
-        if(endGameState.getTotalActivityCount(ActivityType.BREAKFAST)==7)streakMessage+="   FAST BREAKER   ";
+        if(endGameState.streaks[4])streakMessage+="   FAST BREAKER   ";
 
 
         var inner = new Table(game.skin);
@@ -143,13 +143,10 @@ public class EndScreen implements Screen {
             totalScore += (float) (normalisedDayScore * (1 / 7f));
         }
 
-        for(int x =0;x<4;x++){
+        for(int x =0;x<5;x++){
              totalScore += state.streaks[x] ? 5 : 0;
       }
-        if(state.getTotalActivityCount(ActivityType.BREAKFAST) ==7){
-            totalScore =+ 5;
 
-        }
 
         // Clamp total score from 0-100
         return Math.min(100, Math.max(0, totalScore));

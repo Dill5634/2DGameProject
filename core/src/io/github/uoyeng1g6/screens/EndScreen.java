@@ -53,6 +53,14 @@ public class EndScreen implements Screen {
         root.add("Game Over").getActor().setFontScale(2);
         root.row();
 
+        String streakMessage= "";
+        if(endGameState.streaks[0])streakMessage+="   FEEDER   ";
+        if(endGameState.streaks[1])streakMessage+="   WALKER   ";
+        if(endGameState.streaks[2])streakMessage+="   BOOKWORM   ";
+        if(endGameState.streaks[3])streakMessage+="   ALCOHOLIC   ";
+        if(endGameState.getTotalActivityCount(ActivityType.BREAKFAST)==7)streakMessage+="   FAST BREAKER   ";
+
+
         var inner = new Table(game.skin);
 
         inner.add(String.format("Exam Score: %.2f / 100", calculateExamScore(endGameState)))
@@ -64,6 +72,8 @@ public class EndScreen implements Screen {
         inner.row();
         inner.add("Recreational Activities Done: " + endGameState.getTotalActivityCount(ActivityType.PLAY));
         inner.row();
+        inner.add("Streak Achievements Gained:" + streakMessage);
+        inner.row();
 
         var mainMenuButton = new TextButton("Main Menu", game.skin);
         mainMenuButton.addListener(ChangeListener.of((e, a) -> game.setState(HeslingtonHustle.State.MAIN_MENU)));
@@ -73,7 +83,7 @@ public class EndScreen implements Screen {
                 .height(Value.percentHeight(0.1f, inner));
 
         root.add(inner).grow();
-        System.out.println(endGameState.streaks[2]);
+        System.out.println(endGameState.getTotalActivityCount(ActivityType.BREAKFAST));
     }
 
     /**
@@ -133,9 +143,13 @@ public class EndScreen implements Screen {
             totalScore += (float) (normalisedDayScore * (1 / 7f));
         }
 
-       // for(int x =0;x<4;x++){
-        //     totalScore += state.streaks[x] ? 5 : 0;
-      //  }
+        for(int x =0;x<4;x++){
+             totalScore += state.streaks[x] ? 5 : 0;
+      }
+        if(state.getTotalActivityCount(ActivityType.BREAKFAST) ==7){
+            totalScore =+ 5;
+
+        }
 
         // Clamp total score from 0-100
         return Math.min(100, Math.max(0, totalScore));

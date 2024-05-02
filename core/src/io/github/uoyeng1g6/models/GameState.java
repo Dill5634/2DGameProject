@@ -90,7 +90,7 @@ public class GameState {
     public InteractionOverlay interactionOverlay = null;
 
     public Boolean[] streaks = {true,true,true,true};
-    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.STUDY,ActivityType.MEAL};
+    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.LIBRARY,ActivityType.SPOONS};
 
     /**
      * End and store the current day and advance to a new one. Resets the current energy and hours remaining.
@@ -132,21 +132,25 @@ public class GameState {
         if (hoursRemaining < timeUsage || energyRemaining < energyUsage) {
             return false;
         }
-
-        hoursRemaining -= timeUsage;
+        System.out.println();hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
-       currentDay.activityStats.merge(type, 1, Integer::sum);
+
 
 
         if(ActivityType.WORK.contains(type)){
             currentDay.setStats.merge(ActivityType.WORK,1,Integer::sum);
         }
         if(ActivityType.EAT.contains(type)){
+            if(currentDay.activityStats.isEmpty()){
+
+                currentDay.activityStats.merge(ActivityType.BREAKFAST,1,Integer::sum);
+            }
             currentDay.setStats.merge(ActivityType.EAT,1,Integer::sum);
         }
         if(ActivityType.PLAY.contains(type)){
             currentDay.setStats.merge(ActivityType.PLAY,1,Integer::sum);
         }
+        currentDay.activityStats.merge(type, 1, Integer::sum);
 
         interactionOverlay = new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage,pos);
 
@@ -159,7 +163,9 @@ public class GameState {
      * @param type the type of activity to get the total for.
      * @return the total number of activities of that type done.
      */
-
+    public int getTotalActivityCount(ActivityType type) {
+        return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
+    }
     public int getTotalActivityCount(EnumSet<ActivityType> type) {
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }

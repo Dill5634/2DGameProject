@@ -282,41 +282,85 @@ public class Playing implements Screen {
      * @return the created entities.
      */
     Entity[] initInteractionLocations(Engine engine) {
-        final var iconSize = 2 / 64f;
+        final var iconSize = 2/ 64f;
         var ref = engine.getSystem(cameraFollowSystem.getClass());
 
         var studyIcon = game.interactionIconsTextureAtlas.findRegion("book_icon");
-        var study = engine.createEntity()
+        var csBuilding = engine.createEntity()
                 .add(new TextureComponent(studyIcon, iconSize).show())
-                .add(new PositionComponent(30, 82))
+                .add(new PositionComponent(20, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        30, 82, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
+                        20, 82, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(0, 10, ActivityType.STUDY, "Studying...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 10, ActivityType.CSBUILDING, "Studying...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
-                .add(new TooltipComponent(game.tooltipFont, "[E] Study for exams\nTime: -1h\nEnergy: -10"));
+                .add(new TooltipComponent(game.tooltipFont, "[E] Study at CS Building\nTime: -1h\nEnergy: -10"));
 
-        var foodIcon = game.interactionIconsTextureAtlas.findRegion("food_icon");
-        var food = engine.createEntity()
-                .add(new TextureComponent(foodIcon, iconSize).show())
+        var library = engine.createEntity()
+                .add(new TextureComponent(studyIcon, iconSize).show())
                 .add(new PositionComponent(25, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        25, 82, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
+                        25, 82, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(0, 5, ActivityType.MEAL, "Eating...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 10, ActivityType.LIBRARY, "Studying...",ref.getCameraPosition())) {
+                        // Notify insufficient time/energy
+                    }
+                }))
+                .add(new TooltipComponent(game.tooltipFont, "[E] Study at Library\nTime: -1h\nEnergy: -10"));
+
+
+
+
+        var foodIcon = game.interactionIconsTextureAtlas.findRegion("food_icon");
+        var piazza = engine.createEntity()
+                .add(new TextureComponent(foodIcon, iconSize).show())
+                .add(new PositionComponent(30, 82))
+                .add(new HitboxComponent(new Rectangle(
+                        30, 82, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> {
+                    if (!state.doActivity(0, 5, ActivityType.PIAZZA, "Eating...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Eat at Piazza\nTime: -1h\nEnergy: -5"));
 
+        var glasshouse = engine.createEntity()
+                .add(new TextureComponent(foodIcon, iconSize).show())
+                .add(new PositionComponent(35, 82))
+                .add(new HitboxComponent(new Rectangle(
+                        35, 82, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> {
+                    if (!state.doActivity(0, 5, ActivityType.GLASSHOUSE, "Eating...",ref.getCameraPosition())) {
+                        // Notify insufficient time/energy
+                    }
+                }))
+                .add(new TooltipComponent(game.tooltipFont, "[E] Eat at the Glasshouse\nTime: -1h\nEnergy: -5"));
+
+        var wetherspoons = engine.createEntity()
+                .add(new TextureComponent(foodIcon, iconSize).show())
+                .add(new PositionComponent(40, 82))
+                .add(new HitboxComponent(new Rectangle(
+                        40, 82, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> {
+                    if (!state.doActivity(0, 5, ActivityType.SPOONS, "Eating...",ref.getCameraPosition())) {
+                        // Notify insufficient time/energy
+                    }
+                }))
+                .add(new TooltipComponent(game.tooltipFont, "[E] Snack at Spoons\nTime: -1h\nEnergy: -5"));
+
+
+
+
+
+
         var popcornIcon = game.interactionIconsTextureAtlas.findRegion("popcorn_icon");
         var recreation = engine.createEntity()
                 .add(new TextureComponent(popcornIcon, iconSize).show())
-                .add(new PositionComponent(35, 82))
+                .add(new PositionComponent(45, 82))
                 .add(new HitboxComponent(new Rectangle(
-                        35,
+                        45,
                         82,
                         popcornIcon.getRegionWidth() * iconSize,
                         popcornIcon.getRegionHeight() * iconSize)))
@@ -336,24 +380,41 @@ public class Playing implements Screen {
                         popcornIcon.getRegionWidth() * iconSize,
                         popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(0, 10, ActivityType.DUCKS, "Feeding ducks...",ref.getCameraPosition())) {
+                    if (!state.doActivity(0, 10, ActivityType.WALK, "Feeding ducks...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Feed the ducks\nTime: -1h\nEnergy: -10"));
 
+        var walk = engine.createEntity()
+                .add(new TextureComponent(popcornIcon, iconSize).show())
+                .add(new PositionComponent(50, 82))
+                .add(new HitboxComponent(new Rectangle(
+                        50,
+                        82,
+                        popcornIcon.getRegionWidth() * iconSize,
+                        popcornIcon.getRegionHeight() * iconSize)))
+                .add(new InteractionComponent(state -> {
+                    if (!state.doActivity(0, 10, ActivityType.WALK, "Walking...",ref.getCameraPosition())) {
+                        // Notify insufficient time/energy
+                    }
+                }))
+                .add(new TooltipComponent(game.tooltipFont, "[E] Go for a walk\nTime: -1h\nEnergy: -10"));
+
+
+
 
         var sleepIcon = game.interactionIconsTextureAtlas.findRegion("bed_icon");
         var sleep = engine.createEntity()
                 .add(new TextureComponent(sleepIcon, iconSize).show())
-                .add(new PositionComponent(9, 82f))
+                .add(new PositionComponent(6, 81f))
                 .add(new HitboxComponent(new Rectangle(
-                        9, 82, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))
+                        6, 81, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> this.gameState.advanceDay(ref.getCameraPosition())))
                 //.add(new InteractionComponent(GameState::advanceDay))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Go to sleep\nEnds the current day"));
 
-        return new Entity[] {study, food, recreation,ducks, sleep};
+        return new Entity[] {sleep, csBuilding,library, piazza,wetherspoons,glasshouse, recreation,ducks,walk};
     }
 
     /**

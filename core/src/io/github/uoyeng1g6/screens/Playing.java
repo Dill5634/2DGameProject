@@ -217,25 +217,25 @@ public class Playing implements Screen {
 
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
-                        dayStudyLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.STUDY)))));
+                        dayStudyLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.WORK)))));
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
-                        dayEatLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.MEAL)))));
+                        dayEatLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.EAT)))));
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
                         dayRecreationLabel,
-                        state -> String.valueOf(state.currentDay.statFor(ActivityType.RECREATION)))));
+                        state -> String.valueOf(state.currentDay.statFor(ActivityType.PLAY)))));
 
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
-                        totalStudyLabel, state -> String.valueOf(state.getTotalActivityCount(ActivityType.STUDY)))));
+                        totalStudyLabel, state -> String.valueOf(state.getTotalActivityCount(ActivityType.WORK)))));
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
-                        totalEatLabel, state -> String.valueOf(state.getTotalActivityCount(ActivityType.MEAL)))));
+                        totalEatLabel, state -> String.valueOf(state.getTotalActivityCount(ActivityType.EAT)))));
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
                         totalRecreationLabel,
-                        state -> String.valueOf(state.getTotalActivityCount(ActivityType.RECREATION)))));
+                        state -> String.valueOf(state.getTotalActivityCount(ActivityType.PLAY)))));
 
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(energyAmount, state -> String.valueOf(state.energyRemaining))));

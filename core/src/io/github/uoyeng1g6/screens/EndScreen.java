@@ -58,11 +58,11 @@ public class EndScreen implements Screen {
         inner.add(String.format("Exam Score: %.2f / 100", calculateExamScore(endGameState.days)))
                 .padBottom(50);
         inner.row();
-        inner.add("Times Studied: " + endGameState.getTotalActivityCount(ActivityType.STUDY));
+        inner.add("Times Studied: " + endGameState.getTotalActivityCount(ActivityType.WORK));
         inner.row();
-        inner.add("Meals Eaten: " + endGameState.getTotalActivityCount(ActivityType.MEAL));
+        inner.add("Meals Eaten: " + endGameState.getTotalActivityCount(ActivityType.EAT));
         inner.row();
-        inner.add("Recreational Activities Done: " + endGameState.getTotalActivityCount(ActivityType.RECREATION));
+        inner.add("Recreational Activities Done: " + endGameState.getTotalActivityCount(ActivityType.PLAY));
         inner.row();
 
         var mainMenuButton = new TextButton("Main Menu", game.skin);
@@ -119,9 +119,9 @@ public class EndScreen implements Screen {
         float totalScore = 0;
 
         for (var day : days) {
-            int studyCount = day.statFor(ActivityType.STUDY);
-            int mealCount = day.statFor(ActivityType.MEAL);
-            int recreationCount = day.statFor(ActivityType.RECREATION);
+            int studyCount = day.statFor(ActivityType.WORK);
+            int mealCount = day.statFor(ActivityType.EAT);
+            int recreationCount = day.statFor(ActivityType.PLAY);
 
             var dayScore = getDayScore(studyCount, mealCount, recreationCount);
             // Normalise day score between 0 and 100, round up to nearest whole number

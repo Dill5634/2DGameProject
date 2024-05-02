@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 
 /**
@@ -18,7 +19,7 @@ public class GameState {
          * Map of activity type to number of activities completed of that type.
          */
         public final HashMap<ActivityType, Integer> activityStats = new HashMap<>();
-
+        public final HashMap<EnumSet<ActivityType>, Integer> setStats = new HashMap<>();
         /**
          * Get the number of times an activity of a specific type has been done.
          *
@@ -27,6 +28,10 @@ public class GameState {
          */
         public int statFor(ActivityType type) {
             return activityStats.getOrDefault(type, 0);
+        }
+
+        public int statFor(EnumSet<ActivityType> type) {
+            return setStats.getOrDefault(type, 0);
         }
     }
 
@@ -87,9 +92,10 @@ public class GameState {
         daysRemaining--;
         energyRemaining = GameConstants.MAX_ENERGY;
         hoursRemaining = GameConstants.MAX_HOURS;
-
+        System.out.println(currentDay.setStats.get(ActivityType.WORK));
         days.add(currentDay);
         currentDay = new Day();
+
 
       interactionOverlay = new InteractionOverlay("Sleeping...", 3,camPosition);
     }
@@ -112,7 +118,18 @@ public class GameState {
 
         hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
-        currentDay.activityStats.merge(type, 1, Integer::sum);
+      //  currentDay.activityStats.merge(type, 1, Integer::sum);
+
+
+        if(ActivityType.WORK.contains(type)){
+            currentDay.setStats.merge(ActivityType.WORK,1,Integer::sum);
+        }
+        if(ActivityType.EAT.contains(type)){
+            currentDay.setStats.merge(ActivityType.EAT,1,Integer::sum);
+        }
+        if(ActivityType.PLAY.contains(type)){
+            currentDay.setStats.merge(ActivityType.PLAY,1,Integer::sum);
+        }
 
         interactionOverlay = new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage,pos);
 
@@ -126,6 +143,9 @@ public class GameState {
      * @return the total number of activities of that type done.
      */
     public int getTotalActivityCount(ActivityType type) {
+        return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
+    }
+    public int getTotalActivityCount(EnumSet<ActivityType> type) {
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }
 }

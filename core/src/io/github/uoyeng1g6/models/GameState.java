@@ -132,9 +132,10 @@ public class GameState {
         if (hoursRemaining < timeUsage || energyRemaining < energyUsage) {
             return false;
         }
-        System.out.println();hoursRemaining -= timeUsage;
-        energyRemaining -= energyUsage;
 
+        hoursRemaining -= timeUsage;
+        energyRemaining -= energyUsage;
+        //System.out.println(hoursRemaining);
 
 
         if(ActivityType.WORK.contains(type)){

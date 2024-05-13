@@ -15,11 +15,11 @@ public class GameConstants {
     /**
      * The width of the camera in tiles
      */
-    public static final float CAMERA_WIDTH = 130/3f;
+    public static final float CAMERA_WIDTH = 130/3.5f;
     /**
      * The height of the camera in tiles
      */
-    public static final float CAMERA_HEIGHT = 108/3f;
+    public static final float CAMERA_HEIGHT = 108/3.5f;
     /**
      * The pixels per tile
      */

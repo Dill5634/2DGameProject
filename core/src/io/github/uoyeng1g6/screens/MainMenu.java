@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -21,10 +22,12 @@ public class MainMenu implements Screen {
      * The {@code scene2d.ui} stage used to render this screen.
      */
     Stage stage;
+    public static String playerName;
 
     public MainMenu(HeslingtonHustle game) {
         var camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
+
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
@@ -39,10 +42,23 @@ public class MainMenu implements Screen {
         root.add("Heslington Hustle").getActor().setFontScale(2);
         root.row();
 
+        var userName = new TextField("", game.skin);
+        userName.setMessageText("Enter Name");
+
+
         var inner = new Table(game.skin);
 
+        inner.add(userName).pad(10).width(Value.percentWidth(0.4f, inner)).height(Value.percentHeight(0.1f, inner));
+        inner.row();
+
         var startButton = new TextButton("Start Game", game.skin);
-        startButton.addListener(ChangeListener.of((e, a) -> game.setState(HeslingtonHustle.State.PLAYING)));
+        startButton.addListener(ChangeListener.of((e, a) ->{
+            playerName = userName.getText();
+            if(playerName.isEmpty()) playerName = "ANON";
+
+            game.setState(HeslingtonHustle.State.PLAYING);}
+
+        ));
         inner.add(startButton).pad(10).width(Value.percentWidth(0.4f, inner)).height(Value.percentHeight(0.1f, inner));
 
         inner.row();

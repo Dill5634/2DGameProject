@@ -1,6 +1,5 @@
 package io.github.uoyeng1g6.components;
 
-import javax.swing.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.models.GameState;

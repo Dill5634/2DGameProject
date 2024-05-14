@@ -1,8 +1,8 @@
-UWU 10.000001
+Test2 10.000001
 Test1 6.571429
 ANON 5.571429
-Gamer 3.4285717
-null 0.0
+ANON 4.1428576
+Test3 3.4285717
 null 0.0
 null 0.0
 null 0.0

@@ -29,8 +29,6 @@ public class LeaderBoard {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
-
     }
 
     public boolean insert(String name,float score){

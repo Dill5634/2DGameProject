@@ -5,7 +5,6 @@ import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.HeslingtonHustle;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.models.GameState;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -60,5 +59,26 @@ class EndScreenTest {
         //can someone else add the actual scoring since I do not fully understand how it works
         //apparently this gives 15??
         assertEquals(15, endScreen.calculateExamScore(endState));
+    }
+
+    @Test
+    void getDayScoreTest(){
+        endScreen = mock(EndScreen.class);
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        //nothing generates no score
+        when(endScreen.getDayScore(x,y,z)).thenCallRealMethod();
+        assertEquals(0, endScreen.getDayScore(x,y,z));
+
+        //check no score is given if no study occurs
+        y = 1;
+        z = 1;
+        when(endScreen.getDayScore(x,y,z)).thenCallRealMethod();
+        assertEquals(0, endScreen.getDayScore(x,y,z));
+
+        x = 1;
+        when(endScreen.getDayScore(x,y,z)).thenCallRealMethod();
+        assertEquals(12, Math.round(endScreen.getDayScore(x,y,z)));
     }
 }

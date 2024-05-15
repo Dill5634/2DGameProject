@@ -149,7 +149,7 @@ public class EndScreen implements Screen {
     /**
      * Calculate the aggregate score of all the days.
      *
-     * @param days the days to calculate the score for.
+     * @param state the current game state
      * @return the computed game score.
      */
     float calculateExamScore(GameState state) {

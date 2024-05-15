@@ -189,7 +189,7 @@ public class Playing implements Screen {
         tables[2] = energy;
         cameraFollowSystem.addTables(tables);
 
-        initTerrain(game.tiledMap, world);
+        Array<Body> bodiesArray = initTerrain(game.tiledMap, world);
 
         for (var entity : initInteractionLocations(engine)) {
             engine.addEntity(entity);
@@ -249,7 +249,7 @@ public class Playing implements Screen {
         engine.addSystem(new CounterUpdateSystem(gameState));
         engine.addSystem(new CollisionRenderingSystem(gameState));
         if (game.debug) {
-            engine.addSystem(new DebugSystem(game.shapeDrawer));
+            engine.addSystem(new DebugSystem(game.shapeDrawer, bodiesArray));
         }
         engine.addSystem(
                 new InteractionOverlayRenderingSystem(game.spriteBatch, game.overlayFont, game.shapeDrawer, gameState));
@@ -271,8 +271,9 @@ public class Playing implements Screen {
     /**
      * Load collsion objects from map and create them in the box2d world.
      */
-    void initTerrain(TiledMap map, World world) {
+    Array<Body> initTerrain(TiledMap map, World world) {
         Array<Body> bodies = CollisionRenderingSystem.RenderCollisionBodies(map, world);
+        return bodies;
     }
 
     /**
@@ -443,7 +444,7 @@ public class Playing implements Screen {
      * @return the created entity.
      */
     Entity initPlayerEntity(Engine engine) {
-        var playerAnimations = new AnimationComponent(0.05f);
+        var playerAnimations = new AnimationComponent(PlayerConstants.SPRITE_SCALE);
         playerAnimations.animations.put(
                 MoveDirection.STATIONARY,
                 new Animation<>(1f, game.playerTextureAtlas.createSprites("stationary"), Animation.PlayMode.LOOP));

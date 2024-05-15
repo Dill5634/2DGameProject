@@ -67,8 +67,8 @@ public class InteractionOverlayRenderingSystem extends EntitySystem {
         var pos = gameState.interactionOverlay.position;
 
 
-        var halfWorldWidth = (float) GameConstants.CAMERA_WIDTH / 2;
-        var halfWorldHeight = (float) GameConstants.CAMERA_HEIGHT / 2;
+        var halfWorldWidth = GameConstants.CAMERA_WIDTH / 2;
+        var halfWorldHeight = GameConstants.CAMERA_HEIGHT / 2;
         var zeroX = pos.x-halfWorldWidth;
         var zeroY = pos.y-halfWorldHeight;
         shapeDrawer.filledRectangle(zeroX,zeroY , GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, OVERLAY_COLOR);

@@ -13,7 +13,7 @@ public class InteractionComponent implements Component {
     @FunctionalInterface
     public interface Interactable {
         /**
-         * Interact with this interactible.
+         * Interact with this interactable.
          *
          * @param state the current game state.
          */

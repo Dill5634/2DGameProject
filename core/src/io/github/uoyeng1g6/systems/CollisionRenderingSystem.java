@@ -117,7 +117,7 @@ public class CollisionRenderingSystem extends EntitySystem {
         result[0] = circleShape;
         return result;
 
-        /** chain part
+        /* chain part
         ChainShape chainShape = new ChainShape();
         Vector2[] worldVertices = new Vector2[32];
         int divisions = 32;

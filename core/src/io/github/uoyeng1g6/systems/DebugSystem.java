@@ -70,7 +70,7 @@ public class DebugSystem extends EntitySystem {
                 shapeDrawer.rectangle(rect, Color.YELLOW, DEBUG_LINE_WIDTH);
             }
         }
-        /**
+        /*
          * for (Body body : bodies){
             Array<Fixture> bodyFixtureList =body.getFixtureList();
             for (var collisionFixture : bodyFixtureList){
@@ -84,6 +84,6 @@ public class DebugSystem extends EntitySystem {
                     shapeDrawer.polygon;
                 }
             }
-        } **/
+        } */
     }
 }

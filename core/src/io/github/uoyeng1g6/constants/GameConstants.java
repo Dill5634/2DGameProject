@@ -7,6 +7,10 @@ public class GameConstants {
     /**
      * The width of the game world in tiles.
      */
+    public static final float ZOOM_FACTOR = 0.3f * PlayerConstants.PLAYER_SCALER;
+    /**
+     * Ensures the size of the player character matches with the camera zoom
+     */
     public static final int WORLD_WIDTH = 130;
     /**
      * The height of the game world in tiles.
@@ -15,11 +19,11 @@ public class GameConstants {
     /**
      * The width of the camera in tiles
      */
-    public static final float CAMERA_WIDTH = 130/3.5f;
+    public static final float CAMERA_WIDTH = 130/ZOOM_FACTOR;
     /**
      * The height of the camera in tiles
      */
-    public static final float CAMERA_HEIGHT = 108/3.5f;
+    public static final float CAMERA_HEIGHT = 108/ZOOM_FACTOR;
     /**
      * The pixels per tile
      */

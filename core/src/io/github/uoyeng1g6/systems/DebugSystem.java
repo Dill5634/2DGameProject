@@ -7,6 +7,9 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.utils.Array;
 import io.github.uoyeng1g6.components.AnimationComponent;
 import io.github.uoyeng1g6.components.FixtureComponent;
 import io.github.uoyeng1g6.components.HitboxComponent;
@@ -14,6 +17,8 @@ import io.github.uoyeng1g6.components.InteractionComponent;
 import io.github.uoyeng1g6.components.PlayerComponent;
 import io.github.uoyeng1g6.constants.PlayerConstants;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+import java.awt.*;
 
 /**
  * System that handles drawing hitboxes around interactable objects and the player if
@@ -35,9 +40,11 @@ public class DebugSystem extends EntitySystem {
 
     private ImmutableArray<Entity> interactables;
     private Entity playerEntity;
+    private Array<Body> bodies;
 
-    public DebugSystem(ShapeDrawer shapeDrawer) {
+    public DebugSystem(ShapeDrawer shapeDrawer, Array<Body> bodies) {
         this.shapeDrawer = shapeDrawer;
+        this.bodies = bodies;
     }
 
     @Override
@@ -63,5 +70,20 @@ public class DebugSystem extends EntitySystem {
                 shapeDrawer.rectangle(rect, Color.YELLOW, DEBUG_LINE_WIDTH);
             }
         }
+        /**
+         * for (Body body : bodies){
+            Array<Fixture> bodyFixtureList =body.getFixtureList();
+            for (var collisionFixture : bodyFixtureList){
+                Shape collisionShape = collisionFixture.getShape();
+                if (collisionShape instanceof PolygonShape){
+                    PolygonShape shape = (PolygonShape) collisionShape;
+                    float[] shapeVerts;
+                    for (int i = 0; i<shape.getVertexCount(); i++){
+                        shapeVerts += (float) shape.toString();
+                    }
+                    shapeDrawer.polygon;
+                }
+            }
+        } **/
     }
 }

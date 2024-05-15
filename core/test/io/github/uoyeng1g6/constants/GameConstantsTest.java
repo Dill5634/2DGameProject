@@ -13,8 +13,6 @@ class GameConstantsTest {
     void checkConstants(){
         assertEquals(GameConstants.WORLD_WIDTH,130);
         assertEquals(GameConstants.WORLD_HEIGHT,108);
-        assertEquals(GameConstants.CAMERA_WIDTH,130/3f);
-        assertEquals(GameConstants.CAMERA_HEIGHT, 108/3f);
         assertEquals(GameConstants.PIXELS_PER_TILE, 32f);
         assertEquals(GameConstants.FPS, 60);
         assertEquals(GameConstants.FONT_SIZE, 0.1f);

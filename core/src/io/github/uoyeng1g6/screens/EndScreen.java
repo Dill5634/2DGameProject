@@ -1,6 +1,7 @@
 package io.github.uoyeng1g6.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,6 +15,7 @@ import io.github.uoyeng1g6.HeslingtonHustle;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
 import io.github.uoyeng1g6.models.GameState;
+import io.github.uoyeng1g6.models.LeaderBoard;
 import io.github.uoyeng1g6.utils.ChangeListener;
 import java.util.List;
 
@@ -36,12 +38,19 @@ public class EndScreen implements Screen {
      */
     Stage stage;
 
+    LeaderBoard leaderboard;
+
     public EndScreen(HeslingtonHustle game, GameState endGameState) {
         camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
+
+        leaderboard = new LeaderBoard();
+        float finalScore = calculateExamScore(endGameState);
+        leaderboard.insert(MainMenu.playerName, finalScore);
+
 
         var root = new Table(game.skin);
         root.setFillParent(true);
@@ -50,8 +59,22 @@ public class EndScreen implements Screen {
         root.setDebug(game.debug);
         stage.addActor(root);
 
-        root.add("Game Over").getActor().setFontScale(2);
+        root.add("                                                                          Game Over").getActor().setFontScale(2);
         root.row();
+
+
+        var leader= new Table(game.skin);
+        leader.add("                        LEADERBOARD");
+        leader.row();
+        leader.add(System.lineSeparator());
+        leader.row();
+        for(int x = 0;x<10;x++){
+
+            leader.add(leaderboard.show(x)[0]);
+            leader.add(leaderboard.show(x)[1]);
+            leader.row();
+
+        }
 
         String streakMessage= "";
         if(endGameState.streaks[0])streakMessage+="   FEEDER   ";
@@ -61,9 +84,11 @@ public class EndScreen implements Screen {
         if(endGameState.streaks[4])streakMessage+="   FAST BREAKER   ";
 
 
+
         var inner = new Table(game.skin);
 
-        inner.add(String.format("Exam Score: %.2f / 100", calculateExamScore(endGameState)))
+
+        inner.add(String.format("Exam Score: %.2f / 100", finalScore))
                 .padBottom(50);
         inner.row();
         inner.add("Times Studied: " + endGameState.getTotalActivityCount(ActivityType.WORK));
@@ -81,7 +106,7 @@ public class EndScreen implements Screen {
                 .padTop(50)
                 .width(Value.percentWidth(0.4f, inner))
                 .height(Value.percentHeight(0.1f, inner));
-
+        root.add(leader);
         root.add(inner).grow();
         System.out.println(endGameState.getTotalActivityCount(ActivityType.BREAKFAST));
     }
@@ -96,6 +121,7 @@ public class EndScreen implements Screen {
      * @return the computed score given the activity counts.
      */
     float getDayScore(int studyCount, int mealCount, int recreationCount) {
+
         var studyPoints = 0;
         for (int i = 1; i <= studyCount; i++) {
             studyPoints += i <= 5 ? 10 : -5;
@@ -127,6 +153,12 @@ public class EndScreen implements Screen {
      * @return the computed game score.
      */
     float calculateExamScore(GameState state) {
+
+
+
+
+
+
         List<GameState.Day>days  = state.days;
         float totalScore = 0;
 
@@ -156,6 +188,7 @@ public class EndScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
+
         stage.act();
         stage.draw();
     }
@@ -164,6 +197,8 @@ public class EndScreen implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+
+
 
     @Override
     public void show() {}

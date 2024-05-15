@@ -40,6 +40,7 @@ public class EndScreen implements Screen {
 
     LeaderBoard leaderboard;
 
+
     public EndScreen(HeslingtonHustle game, GameState endGameState) {
         camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
@@ -108,7 +109,6 @@ public class EndScreen implements Screen {
                 .height(Value.percentHeight(0.1f, inner));
         root.add(leader);
         root.add(inner).grow();
-        System.out.println(endGameState.getTotalActivityCount(ActivityType.BREAKFAST));
     }
 
     /**
@@ -153,11 +153,6 @@ public class EndScreen implements Screen {
      * @return the computed game score.
      */
     float calculateExamScore(GameState state) {
-
-
-
-
-
 
         List<GameState.Day>days  = state.days;
         float totalScore = 0;

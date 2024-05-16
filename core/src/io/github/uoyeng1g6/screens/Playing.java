@@ -131,9 +131,9 @@ public class Playing implements Screen {
         var recreationImage = new Image(recreationIcon);
 
         var todayLabel = new Label("Today:", labelStyle);
-        todayLabel.setFontScale(GameConstants.FONT_SIZE/2);
+        todayLabel.setFontScale(GameConstants.FONT_SIZE);
         var totalLabel = new Label("Total:", labelStyle);
-        totalLabel.setFontScale(GameConstants.FONT_SIZE/2);
+        totalLabel.setFontScale(GameConstants.FONT_SIZE);
 
         var dayStudyLabel = new Label("0", labelStyle);
         dayStudyLabel.setFontScale(GameConstants.FONT_SIZE);
@@ -155,15 +155,15 @@ public class Playing implements Screen {
         counters.add(todayLabel).padRight(0.5f);
         counters.add(totalLabel);
         counters.row();
-        counters.add(studyImage).width(3).height(3).padRight(0.25f);
+        counters.add(studyImage).width(1.5f).height(1.5f).padRight(0.25f);
         counters.add(dayStudyLabel);
         counters.add(totalStudyLabel);
         counters.row();
-        counters.add(eatImage).width(3).height(3).padRight(0.25f);
+        counters.add(eatImage).width(1.5f).height(1.5f).padRight(0.25f);
         counters.add(dayEatLabel);
         counters.add(totalEatLabel);
         counters.row();
-        counters.add(recreationImage).width(3).height(3).padRight(0.25f);
+        counters.add(recreationImage).width(1.5f).height(1.5f).padRight(0.25f);
         counters.add(dayRecreationLabel);
         counters.add(totalRecreationLabel);
 
@@ -396,7 +396,7 @@ public class Playing implements Screen {
                         popcornIcon.getRegionWidth() * iconSize,
                         popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(0, 10, ActivityType.WALK, "Walking...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.WALK, "Walking...",ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))

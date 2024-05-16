@@ -114,8 +114,9 @@ public class GameState {
 
 
 
-      interactionOverlay = new InteractionOverlay("Sleeping...", 3,camPosition);
+
     }
+
 
     /**
      * Do an activity. Subtracts the amount of time and energy required to do the activity and displays
@@ -129,7 +130,12 @@ public class GameState {
      * @return boolean indicating whether the activity could be performed.
      */
     public boolean doActivity(int timeUsage, int energyUsage, ActivityType type, String overlayText, Vector2 pos) {
-        if (hoursRemaining < timeUsage || energyRemaining < energyUsage) {
+        if (hoursRemaining < timeUsage) {
+            interactionOverlay = new InteractionOverlay("NO TIME!!!", 0.5f,pos);
+            return false;
+        }
+        if (energyRemaining < energyUsage) {
+            interactionOverlay = new InteractionOverlay("NO ENERGY!!!", 0.5f,pos);
             return false;
         }
         System.out.println();hoursRemaining -= timeUsage;

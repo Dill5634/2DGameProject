@@ -1,19 +1,16 @@
 package io.github.uoyeng1g6.screens;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.HeslingtonHustle;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.models.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(GdxTestRunner.class)
 class EndScreenTest {
 
     EndScreen endScreen;
@@ -53,7 +50,6 @@ class EndScreenTest {
         }
 
         endScreen = mock(EndScreen.class);
-
         //call real method for calculating exam score
         when(endScreen.calculateExamScore(endState)).thenCallRealMethod();
         //can someone else add the actual scoring since I do not fully understand how it works

@@ -1,17 +1,14 @@
 package io.github.uoyeng1g6.components;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.models.GameState;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-@RunWith(GdxTestRunner.class)
 class CounterComponentTest {
 
     @Test

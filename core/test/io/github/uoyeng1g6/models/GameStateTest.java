@@ -1,15 +1,12 @@
 package io.github.uoyeng1g6.models;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(GdxTestRunner.class)
 class GameStateTest {
 
     GameState state;

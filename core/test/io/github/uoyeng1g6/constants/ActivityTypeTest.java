@@ -1,14 +1,9 @@
 package io.github.uoyeng1g6.constants;
 
-import io.github.uoyeng1g6.GdxTestRunner;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-@RunWith(GdxTestRunner.class)
 class ActivityTypeTest {
 
     @Test

@@ -1,5 +1,4 @@
 package io.github.uoyeng1g6.models;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,14 +22,10 @@ class LeaderBoardTest {
         e.setNickname("Test");
         assertEquals(e.getNickname(), "Test");
 
-        // Entry(string, float) constructor class#
+        // Entry(string, float) constructor class
         LeaderBoard.Entry e2 = myLeaderBoard.new Entry("Test2", 0f);
         assertEquals("Test2", e2.getNickname());
         assertEquals(0f, e2.getScore());
-    }
-
-    @Test
-    void testRead(){
     }
 
     @Test
@@ -59,9 +54,5 @@ class LeaderBoardTest {
 
         //test that previous bottom entry has been removed
         assertNotEquals("Testing:9", myLeaderBoard.show(9)[0]);
-    }
-
-    @Test
-    void show() {
     }
 }

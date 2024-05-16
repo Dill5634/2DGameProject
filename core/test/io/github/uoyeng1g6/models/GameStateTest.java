@@ -1,22 +1,19 @@
 package io.github.uoyeng1g6.models;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.uoyeng1g6.GdxTestRunner;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
-import io.github.uoyeng1g6.models.GameState;
-import io.github.uoyeng1g6.systems.CounterUpdateSystem;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(GdxTestRunner.class)
 class GameStateTest {
 
-    private GameState state = new GameState();
+    GameState state;
+    @BeforeEach
+    void setUp(){
+        state = new GameState();
+    }
 
     @Test
     void advanceDay() {
@@ -71,9 +68,21 @@ class GameStateTest {
     @Test
     void testGetTotalActivityCount() {
         //check counter works correctly
-        state.doActivity(1,1, ActivityType.WALK,"test", new Vector2(0,0));
+        state.doActivity(1,1, ActivityType.SPOONS,"test", new Vector2(0,0));
         state.doActivity(1,1, ActivityType.LIBRARY,"test", new Vector2(0,0));
-        assertEquals(state.getTotalActivityCount(ActivityType.WALK),1);
+        assertEquals(state.getTotalActivityCount(ActivityType.SPOONS),1);
         assertEquals(state.getTotalActivityCount(ActivityType.LIBRARY),1);
+
+        assertEquals(state.getTotalActivityCount(ActivityType.EAT), 1);
+    }
+
+    @Test
+    void testStreaks() {
+        for (int i = 0; i < 7; i++){
+            state.doActivity(0,50, ActivityType.DUCKS, "test", new Vector2(0,0));
+            state.advanceDay(new Vector2(0,0));
+        }
+        assertEquals(true, state.streaks[0]);
+        assertEquals(false, state.streaks[1]);
     }
 }

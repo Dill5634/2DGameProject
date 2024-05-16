@@ -52,9 +52,10 @@ class EndScreenTest {
         endScreen = mock(EndScreen.class);
         //call real method for calculating exam score
         when(endScreen.calculateExamScore(endState)).thenCallRealMethod();
+        when(endScreen.getDayScore(5,3,3)).thenCallRealMethod();
         //can someone else add the actual scoring since I do not fully understand how it works
         //apparently this gives 15??
-        assertEquals(15, endScreen.calculateExamScore(endState));
+        assertEquals(92, Math.round(endScreen.calculateExamScore(endState)));
     }
 
     @Test

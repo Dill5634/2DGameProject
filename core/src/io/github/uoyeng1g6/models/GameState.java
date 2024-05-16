@@ -114,7 +114,7 @@ public class GameState {
 
 
 
-      interactionOverlay = new InteractionOverlay("Sleeping...", 0,camPosition);
+      interactionOverlay = new InteractionOverlay("Sleeping...", 3,camPosition);
     }
 
     /**

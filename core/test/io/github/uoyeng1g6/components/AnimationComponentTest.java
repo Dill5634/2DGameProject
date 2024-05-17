@@ -8,6 +8,6 @@ class AnimationComponentTest {
     @Test
     void TestAnimationComponent() {
         AnimationComponent myAnimationComponent = new AnimationComponent(5);
-        assertEquals(myAnimationComponent.spriteScale, 5);
+        assertEquals(5, myAnimationComponent.spriteScale);
     }
 }

@@ -21,7 +21,7 @@ public class PlayerConstants {
     /**
      * The movement speed of the player.
      */
-    public static final float PLAYER_SPEED = 50f;
+    public static final float PLAYER_SPEED = 20f;
     /**
      * The starting position of the player.
      */

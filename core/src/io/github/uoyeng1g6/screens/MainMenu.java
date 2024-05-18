@@ -23,8 +23,11 @@ public class MainMenu implements Screen {
      */
     Stage stage;
     public static String playerName;
+    TextField userName;
+
 
     public MainMenu(HeslingtonHustle game) {
+
         var camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
 
@@ -42,7 +45,8 @@ public class MainMenu implements Screen {
         root.add("Heslington Hustle").getActor().setFontScale(2);
         root.row();
 
-        var userName = new TextField("", game.skin);
+        userName = new TextField("", game.skin);
+        userName.setDisabled(false);
         userName.setMessageText("Enter Name");
 
 
@@ -55,7 +59,7 @@ public class MainMenu implements Screen {
         startButton.addListener(ChangeListener.of((e, a) ->{
             playerName = userName.getText();
             if(playerName.isEmpty()) playerName = "ANON";
-
+            userName.setDisabled(true);
             game.setState(HeslingtonHustle.State.PLAYING);}
 
         ));
@@ -80,6 +84,8 @@ public class MainMenu implements Screen {
 
     @Override
     public void show() {
+        userName.setMessageText("Enter Name");
+        userName.setDisabled(false);
         Gdx.input.setInputProcessor(stage);
     }
 

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 class InteractionComponentTest {
 
     @Test
-    void TestInteraction()
+    void testInteraction()
     {
         InteractionComponent.Interactable mockInteractable = mock(InteractionComponent.Interactable.class);
             InteractionComponent i = new InteractionComponent(mockInteractable);

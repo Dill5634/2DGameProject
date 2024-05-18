@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnimationComponentTest {
     @Test
-    void TestAnimationComponent() {
+    void testAnimationComponent() {
         AnimationComponent myAnimationComponent = new AnimationComponent(5);
         assertEquals(5, myAnimationComponent.spriteScale);
     }

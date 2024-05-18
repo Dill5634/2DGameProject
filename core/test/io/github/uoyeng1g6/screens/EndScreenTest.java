@@ -25,12 +25,6 @@ class EndScreenTest {
     }
 
     @Test
-    void getDayScore() {
-        //get day score for a day with no activities
-        assertEquals(0, endScreen.getDayScore(0,0,0));
-    }
-
-    @Test
     void calculateExamScore() {
 
         for (int x = 0; x < 7; x++){

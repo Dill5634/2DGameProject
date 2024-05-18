@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HitboxComponentTest {
 
     @Test
-    void createHitboxTest(){
+    void testHitbox(){
         HitboxComponent h = new HitboxComponent(new Rectangle(5,5,5,5));
         assertNotNull(h);
         assertEquals(new Rectangle(5,5,5,5), h.rects[0]);

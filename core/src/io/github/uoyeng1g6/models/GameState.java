@@ -107,7 +107,6 @@ public class GameState {
         daysRemaining--;
         energyRemaining = GameConstants.MAX_ENERGY;
         hoursRemaining = GameConstants.MAX_HOURS;
-   //     System.out.println(currentDay.statFor(ActivityType.STUDY));
         days.add(currentDay);
         currentDay = new Day();
 

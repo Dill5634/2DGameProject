@@ -26,12 +26,14 @@ class TextureComponentTest {
 
     @Test
     void show() {
+        // check visible when show() is called
         assertEquals(t, t.show());
         assertTrue(t.visible);
     }
 
     @Test
     void hide() {
+        // check not visible when hide() is called
         assertEquals(t, t.hide());
         assertFalse(t.visible);
     }

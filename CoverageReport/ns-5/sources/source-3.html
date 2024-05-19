@@ -1,0 +1,653 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Playing</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6.screens</a>
+</div>
+
+<h1>Coverage Summary for Class: Playing (io.github.uoyeng1g6.screens)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Playing</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/263)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Playing$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/30)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/269)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6.screens;
+&nbsp;
+&nbsp;import com.badlogic.ashley.core.Engine;
+&nbsp;import com.badlogic.ashley.core.Entity;
+&nbsp;import com.badlogic.ashley.core.PooledEngine;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.Screen;
+&nbsp;import com.badlogic.gdx.graphics.Color;
+&nbsp;import com.badlogic.gdx.graphics.GL30;
+&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Animation;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+&nbsp;import com.badlogic.gdx.math.Rectangle;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.*;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.Stage;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Image;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Label;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Table;
+&nbsp;import com.badlogic.gdx.utils.Array;
+&nbsp;import com.badlogic.gdx.utils.Json;
+&nbsp;import com.badlogic.gdx.utils.ScreenUtils;
+&nbsp;import com.badlogic.gdx.utils.viewport.FitViewport;
+&nbsp;import com.badlogic.gdx.utils.viewport.Viewport;
+&nbsp;import io.github.uoyeng1g6.HeslingtonHustle;
+&nbsp;import io.github.uoyeng1g6.components.AnimationComponent;
+&nbsp;import io.github.uoyeng1g6.components.CounterComponent;
+&nbsp;import io.github.uoyeng1g6.components.FixtureComponent;
+&nbsp;import io.github.uoyeng1g6.components.HitboxComponent;
+&nbsp;import io.github.uoyeng1g6.components.InteractionComponent;
+&nbsp;import io.github.uoyeng1g6.components.PlayerComponent;
+&nbsp;import io.github.uoyeng1g6.components.PositionComponent;
+&nbsp;import io.github.uoyeng1g6.components.TextureComponent;
+&nbsp;import io.github.uoyeng1g6.components.TooltipComponent;
+&nbsp;import io.github.uoyeng1g6.constants.ActivityType;
+&nbsp;import io.github.uoyeng1g6.constants.GameConstants;
+&nbsp;import io.github.uoyeng1g6.constants.MoveDirection;
+&nbsp;import io.github.uoyeng1g6.constants.PlayerConstants;
+&nbsp;import io.github.uoyeng1g6.models.GameState;
+&nbsp;import io.github.uoyeng1g6.models.PhysicsPolygon;
+&nbsp;import io.github.uoyeng1g6.systems.*;
+&nbsp;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;/**
+&nbsp; * The gameplay screen for the game. Causes a transition to the end screen once all the in-game
+&nbsp; * days have been completed.
+&nbsp; */
+&nbsp;public class Playing implements Screen {
+&nbsp;    final HeslingtonHustle game;
+&nbsp;
+&nbsp;    final OrthographicCamera camera;
+&nbsp;    final Viewport viewport;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The {@code scene2d.ui} stage used to render the ui overlay for this screen.
+&nbsp;     */
+&nbsp;    Stage stage;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The engine used to handle system updating.
+&nbsp;     */
+&nbsp;    Engine engine;
+&nbsp;    /**
+&nbsp;     * The current game state;
+&nbsp;     */
+&nbsp;    GameState gameState;
+&nbsp;    /**
+&nbsp;     * The box2d world used for the physics system.
+&nbsp;     */
+&nbsp;    World world;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The box2d debug renderer used when the game is running in physics debug mode.
+&nbsp;     */
+<b class="nc">&nbsp;    Box2DDebugRenderer debugRenderer = null;</b>
+&nbsp;
+&nbsp;    CameraFollowSystem cameraFollowSystem;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;    public Playing(HeslingtonHustle game) {</b>
+<b class="nc">&nbsp;        this.game = game;</b>
+&nbsp;
+<b class="nc">&nbsp;        this.engine = new PooledEngine();</b>
+<b class="nc">&nbsp;        this.gameState = new GameState();</b>
+<b class="nc">&nbsp;        this.world = new World(new Vector2(), true);</b>
+&nbsp;
+<b class="nc">&nbsp;        camera = new OrthographicCamera();</b>
+<b class="nc">&nbsp;        this.camera.setToOrtho(false, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT);</b>
+<b class="nc">&nbsp;        viewport = new FitViewport(GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, camera);</b>
+<b class="nc">&nbsp;        viewport.apply();</b>
+<b class="nc">&nbsp;        camera.position.set(PlayerConstants.START_POSITION.x, PlayerConstants.START_POSITION.y, 0);</b>
+<b class="nc">&nbsp;        camera.update();</b>
+&nbsp;
+<b class="nc">&nbsp;        cameraFollowSystem = new CameraFollowSystem(gameState, camera, viewport);</b>
+<b class="nc">&nbsp;        engine.addSystem(cameraFollowSystem);</b>
+<b class="nc">&nbsp;        Entity playerEntity = initPlayerEntity(engine);</b>
+<b class="nc">&nbsp;        engine.addEntity(playerEntity);</b>
+<b class="nc">&nbsp;        cameraFollowSystem.addPlayer(playerEntity);</b>
+&nbsp;
+<b class="nc">&nbsp;        stage = new Stage(viewport);</b>
+&nbsp;
+<b class="nc">&nbsp;        var labelStyle = new Label.LabelStyle(game.tooltipFont, Color.BLACK);</b>
+&nbsp;
+<b class="nc">&nbsp;        var uiTop = new Table();</b>
+<b class="nc">&nbsp;        uiTop.setFillParent(true);</b>
+<b class="nc">&nbsp;        uiTop.setDebug(game.debug);</b>
+<b class="nc">&nbsp;        stage.addActor(uiTop);</b>
+<b class="nc">&nbsp;        uiTop.center().top();</b>
+&nbsp;
+<b class="nc">&nbsp;        var daysLabel = new Label(&quot;Monday&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        daysLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        uiTop.add(daysLabel);</b>
+<b class="nc">&nbsp;        uiTop.row();</b>
+<b class="nc">&nbsp;        var timeLabel = new Label(&quot;07:00&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        timeLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        uiTop.add(timeLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;        var counters = new Table(game.skin);</b>
+<b class="nc">&nbsp;        counters.setFillParent(true);</b>
+<b class="nc">&nbsp;        counters.pad(1);</b>
+<b class="nc">&nbsp;        counters.setDebug(game.debug);</b>
+<b class="nc">&nbsp;        stage.addActor(counters);</b>
+&nbsp;
+<b class="nc">&nbsp;        var studyIcon = game.interactionIconsTextureAtlas.findRegion(&quot;book_icon&quot;);</b>
+<b class="nc">&nbsp;        var eatIcon = game.interactionIconsTextureAtlas.findRegion(&quot;food_icon&quot;);</b>
+<b class="nc">&nbsp;        var recreationIcon = game.interactionIconsTextureAtlas.findRegion(&quot;popcorn_icon&quot;);</b>
+<b class="nc">&nbsp;        var studyImage = new Image(studyIcon);</b>
+<b class="nc">&nbsp;        var eatImage = new Image(eatIcon);</b>
+<b class="nc">&nbsp;        var recreationImage = new Image(recreationIcon);</b>
+&nbsp;
+<b class="nc">&nbsp;        var todayLabel = new Label(&quot;Today:&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        todayLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        var totalLabel = new Label(&quot;Total:&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        totalLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+&nbsp;
+<b class="nc">&nbsp;        var dayStudyLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        dayStudyLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        var totalStudyLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        totalStudyLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+&nbsp;
+<b class="nc">&nbsp;        var dayEatLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        dayEatLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        var totalEatLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        totalEatLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+&nbsp;
+<b class="nc">&nbsp;        var dayRecreationLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        dayRecreationLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        var totalRecreationLabel = new Label(&quot;0&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        totalRecreationLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+&nbsp;
+<b class="nc">&nbsp;        counters.top().right();</b>
+<b class="nc">&nbsp;        counters.add();</b>
+<b class="nc">&nbsp;        counters.add(todayLabel).padRight(0.5f);</b>
+<b class="nc">&nbsp;        counters.add(totalLabel);</b>
+<b class="nc">&nbsp;        counters.row();</b>
+<b class="nc">&nbsp;        counters.add(studyImage).width(1.5f).height(1.5f).padRight(0.25f);</b>
+<b class="nc">&nbsp;        counters.add(dayStudyLabel);</b>
+<b class="nc">&nbsp;        counters.add(totalStudyLabel);</b>
+<b class="nc">&nbsp;        counters.row();</b>
+<b class="nc">&nbsp;        counters.add(eatImage).width(1.5f).height(1.5f).padRight(0.25f);</b>
+<b class="nc">&nbsp;        counters.add(dayEatLabel);</b>
+<b class="nc">&nbsp;        counters.add(totalEatLabel);</b>
+<b class="nc">&nbsp;        counters.row();</b>
+<b class="nc">&nbsp;        counters.add(recreationImage).width(1.5f).height(1.5f).padRight(0.25f);</b>
+<b class="nc">&nbsp;        counters.add(dayRecreationLabel);</b>
+<b class="nc">&nbsp;        counters.add(totalRecreationLabel);</b>
+&nbsp;
+<b class="nc">&nbsp;        var energy = new Table(game.skin);</b>
+<b class="nc">&nbsp;        energy.setFillParent(true);</b>
+<b class="nc">&nbsp;        energy.pad(1);</b>
+<b class="nc">&nbsp;        energy.setDebug(game.debug);</b>
+<b class="nc">&nbsp;        stage.addActor(energy);</b>
+&nbsp;
+<b class="nc">&nbsp;        var energyLabel = new Label(&quot;Energy Remaining:&quot;, labelStyle);</b>
+<b class="nc">&nbsp;        energyLabel.setFontScale(GameConstants.FONT_SIZE);</b>
+<b class="nc">&nbsp;        var energyAmount = new Label(String.valueOf(GameConstants.MAX_ENERGY), labelStyle);</b>
+<b class="nc">&nbsp;        energyAmount.setFontScale(GameConstants.FONT_SIZE);</b>
+&nbsp;
+<b class="nc">&nbsp;        energy.top().left();</b>
+<b class="nc">&nbsp;        energy.add(energyLabel);</b>
+<b class="nc">&nbsp;        energy.row();</b>
+<b class="nc">&nbsp;        energy.add(energyAmount);</b>
+&nbsp;
+<b class="nc">&nbsp;        Table[] tables = new Table[3];</b>
+<b class="nc">&nbsp;        tables[0] = uiTop;</b>
+<b class="nc">&nbsp;        tables[1] = counters;</b>
+<b class="nc">&nbsp;        tables[2] = energy;</b>
+<b class="nc">&nbsp;        cameraFollowSystem.addTables(tables);</b>
+&nbsp;
+<b class="nc">&nbsp;        Array&lt;Body&gt; bodiesArray = initTerrain(game.tiledMap, world);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (var entity : initInteractionLocations(engine)) {</b>
+<b class="nc">&nbsp;            engine.addEntity(entity);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        engine.addEntity(</b>
+<b class="nc">&nbsp;                engine.createEntity().add(new CounterComponent(daysLabel, new CounterComponent.CounterValueResolver() {</b>
+&nbsp;                    // spotless:off
+<b class="nc">&nbsp;                    private final Map&lt;Integer, String&gt; dayNameMap = Map.of(</b>
+<b class="nc">&nbsp;                            7, &quot;Monday&quot;, 6, &quot;Tuesday&quot;, 5, &quot;Wednesday&quot;,</b>
+<b class="nc">&nbsp;                            4, &quot;Thursday&quot;, 3, &quot;Friday&quot;, 2, &quot;Saturday&quot;,</b>
+<b class="nc">&nbsp;                            1, &quot;Sunday - Exam Tomorrow&quot;</b>
+&nbsp;                    );
+&nbsp;                    // spotless:on
+&nbsp;
+&nbsp;                    @Override
+&nbsp;                    public String resolveValue(GameState gameState) {
+<b class="nc">&nbsp;                        return dayNameMap.get(gameState.daysRemaining);</b>
+&nbsp;                    }
+&nbsp;                })));
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity().add(new CounterComponent(timeLabel, state -&gt; {</b>
+<b class="nc">&nbsp;            var newHour = 7 + (GameConstants.MAX_HOURS - state.hoursRemaining);</b>
+<b class="nc">&nbsp;            return String.format(&quot;%s%d:00&quot;, newHour &lt; 10 ? &quot;0&quot; : &quot;&quot;, newHour);</b>
+&nbsp;        })));
+&nbsp;
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+<b class="nc">&nbsp;                        dayStudyLabel, state -&gt; String.valueOf(state.currentDay.statFor(ActivityType.WORK)))));</b>
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+<b class="nc">&nbsp;                        dayEatLabel, state -&gt; String.valueOf(state.currentDay.statFor(ActivityType.EAT)))));</b>
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+&nbsp;                        dayRecreationLabel,
+<b class="nc">&nbsp;                        state -&gt; String.valueOf(state.currentDay.statFor(ActivityType.PLAY)))));</b>
+&nbsp;
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+<b class="nc">&nbsp;                        totalStudyLabel, state -&gt; String.valueOf(state.getTotalActivityCount(ActivityType.WORK)))));</b>
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+<b class="nc">&nbsp;                        totalEatLabel, state -&gt; String.valueOf(state.getTotalActivityCount(ActivityType.EAT)))));</b>
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(</b>
+&nbsp;                        totalRecreationLabel,
+<b class="nc">&nbsp;                        state -&gt; String.valueOf(state.getTotalActivityCount(ActivityType.PLAY)))));</b>
+&nbsp;
+<b class="nc">&nbsp;        engine.addEntity(engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new CounterComponent(energyAmount, state -&gt; String.valueOf(state.energyRemaining))));</b>
+&nbsp;
+<b class="nc">&nbsp;        engine.addSystem(new PlayerInputSystem(gameState));</b>
+<b class="nc">&nbsp;        engine.addSystem(new PlayerInteractionSystem(gameState));</b>
+<b class="nc">&nbsp;        engine.addSystem(new MapRenderingSystem(game.tiledMap, camera));</b>
+<b class="nc">&nbsp;        engine.addSystem(new StaticRenderingSystem(game.spriteBatch));</b>
+<b class="nc">&nbsp;        engine.addSystem(new AnimationSystem(game.spriteBatch, gameState));</b>
+<b class="nc">&nbsp;        engine.addSystem(new TooltipRenderingSystem(game.tooltipFont, game.shapeDrawer, game.spriteBatch, gameState));</b>
+<b class="nc">&nbsp;        engine.addSystem(new CounterUpdateSystem(gameState));</b>
+<b class="nc">&nbsp;        engine.addSystem(new CollisionRenderingSystem(gameState));</b>
+<b class="nc">&nbsp;        if (game.debug) {</b>
+<b class="nc">&nbsp;            engine.addSystem(new DebugSystem(game.shapeDrawer, bodiesArray));</b>
+&nbsp;        }
+<b class="nc">&nbsp;        engine.addSystem(</b>
+&nbsp;                new InteractionOverlayRenderingSystem(game.spriteBatch, game.overlayFont, game.shapeDrawer, gameState));
+&nbsp;
+<b class="nc">&nbsp;        if (game.physicsDebug) {</b>
+<b class="nc">&nbsp;            debugRenderer = new Box2DDebugRenderer();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the current game state object.
+&nbsp;     *
+&nbsp;     * @return the game state for this playthrough.
+&nbsp;     */
+&nbsp;    public GameState getGameState() {
+<b class="nc">&nbsp;        return gameState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Load collsion objects from map and create them in the box2d world.
+&nbsp;     */
+&nbsp;    Array&lt;Body&gt; initTerrain(TiledMap map, World world) {
+<b class="nc">&nbsp;        Array&lt;Body&gt; bodies = CollisionRenderingSystem.RenderCollisionBodies(map, world);</b>
+<b class="nc">&nbsp;        return bodies;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initialise the entities for the interaction locations on the map
+&nbsp;     *
+&nbsp;     * @param engine the engine to create the entities for.
+&nbsp;     * @return the created entities.
+&nbsp;     */
+&nbsp;    Entity[] initInteractionLocations(Engine engine) {
+<b class="nc">&nbsp;        final var iconSize = 2/ 128f;</b>
+<b class="nc">&nbsp;        var ref = engine.getSystem(cameraFollowSystem.getClass());</b>
+&nbsp;
+<b class="nc">&nbsp;        var studyIcon = game.interactionIconsTextureAtlas.findRegion(&quot;book_icon&quot;);</b>
+<b class="nc">&nbsp;        var csBuilding = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(studyIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(55, 59))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        55, 59, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 10, ActivityType.CSBUILDING, &quot;Studying...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Study at CS Building\nTime: -1h\nEnergy: -10&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        var library = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(studyIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(101, 20))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        101, 20, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 10, ActivityType.LIBRARY, &quot;Studying...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Study at Library\nTime: -1h\nEnergy: -10&quot;));</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var foodIcon = game.interactionIconsTextureAtlas.findRegion(&quot;food_icon&quot;);</b>
+<b class="nc">&nbsp;        var piazza = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(foodIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(9, 74))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        9, 74, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 5, ActivityType.PIAZZA, &quot;Eating...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Eat at Piazza\nTime: -1h\nEnergy: -5&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        var glasshouse = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(foodIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(59, 25))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        59, 25, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 5, ActivityType.GLASSHOUSE, &quot;Eating...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Eat at the Glasshouse\nTime: -1h\nEnergy: -5&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        var wetherspoons = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(foodIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(94, 65))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        94, 65, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 5, ActivityType.SPOONS, &quot;Eating...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Snack at Spoons\nTime: -1h\nEnergy: -5&quot;));</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var popcornIcon = game.interactionIconsTextureAtlas.findRegion(&quot;popcorn_icon&quot;);</b>
+<b class="nc">&nbsp;        var recreation = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(popcornIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(103, 83))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+&nbsp;                        103,
+&nbsp;                        83,
+<b class="nc">&nbsp;                        popcornIcon.getRegionWidth() * iconSize,</b>
+<b class="nc">&nbsp;                        popcornIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 10, ActivityType.RECREATION, &quot;Watching films...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Watch films with mates\nTime: -1h\nEnergy: -10&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        var ducks = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(popcornIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(16, 16))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+&nbsp;                        16,
+&nbsp;                        16,
+<b class="nc">&nbsp;                        popcornIcon.getRegionWidth() * iconSize,</b>
+<b class="nc">&nbsp;                        popcornIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 10, ActivityType.WALK, &quot;Feeding ducks...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Feed the ducks\nTime: -1h\nEnergy: -10&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        var walk = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(popcornIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(126, 27))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+&nbsp;                        126,
+&nbsp;                        27,
+<b class="nc">&nbsp;                        popcornIcon.getRegionWidth() * iconSize,</b>
+<b class="nc">&nbsp;                        popcornIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; {</b>
+<b class="nc">&nbsp;                    if (!state.doActivity(1, 10, ActivityType.WALK, &quot;Walking...&quot;,ref.getCameraPosition())) {</b>
+&nbsp;                        // Notify insufficient time/energy
+&nbsp;                    }
+&nbsp;                }))
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Go for a walk\nTime: -1h\nEnergy: -10&quot;));</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        var sleepIcon = game.interactionIconsTextureAtlas.findRegion(&quot;bed_icon&quot;);</b>
+<b class="nc">&nbsp;        var sleep = engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new TextureComponent(sleepIcon, iconSize).show())</b>
+<b class="nc">&nbsp;                .add(new PositionComponent(6, 83))</b>
+<b class="nc">&nbsp;                .add(new HitboxComponent(new Rectangle(</b>
+<b class="nc">&nbsp;                        6, 83, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))</b>
+<b class="nc">&nbsp;                .add(new InteractionComponent(state -&gt; this.gameState.advanceDay(ref.getCameraPosition())))</b>
+&nbsp;
+<b class="nc">&nbsp;                .add(new TooltipComponent(game.tooltipFont, &quot;[E] Go to sleep\nEnds the current day&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        return new Entity[] {sleep, csBuilding,library, piazza,wetherspoons,glasshouse, recreation,ducks,walk};</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initialise the player&#39;s physics object in the box2d world.
+&nbsp;     *
+&nbsp;     * @return the fixture for the player&#39;s physics object.
+&nbsp;     */
+&nbsp;    Fixture initPlayerBody() {
+<b class="nc">&nbsp;        var player = new BodyDef();</b>
+<b class="nc">&nbsp;        player.type = BodyDef.BodyType.DynamicBody;</b>
+<b class="nc">&nbsp;        player.position.set(PlayerConstants.START_POSITION);</b>
+<b class="nc">&nbsp;        var playerBody = world.createBody(player);</b>
+<b class="nc">&nbsp;        playerBody.setUserData(PlayerConstants.HITBOX_RADIUS);</b>
+<b class="nc">&nbsp;        var playerCircle = new CircleShape();</b>
+<b class="nc">&nbsp;        playerCircle.setRadius(PlayerConstants.HITBOX_RADIUS);</b>
+<b class="nc">&nbsp;        var playerFixture = playerBody.createFixture(playerCircle, 1f);</b>
+<b class="nc">&nbsp;        playerCircle.dispose();</b>
+&nbsp;
+<b class="nc">&nbsp;        return playerFixture;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Initialise the entity that represents the player character.
+&nbsp;     *
+&nbsp;     * @param engine the engine to create the entity for.
+&nbsp;     * @return the created entity.
+&nbsp;     */
+&nbsp;    Entity initPlayerEntity(Engine engine) {
+<b class="nc">&nbsp;        var playerAnimations = new AnimationComponent(PlayerConstants.SPRITE_SCALE);</b>
+<b class="nc">&nbsp;        playerAnimations.animations.put(</b>
+&nbsp;                MoveDirection.STATIONARY,
+<b class="nc">&nbsp;                new Animation&lt;&gt;(1f, game.playerTextureAtlas.createSprites(&quot;stationary&quot;), Animation.PlayMode.LOOP));</b>
+<b class="nc">&nbsp;        playerAnimations.animations.put(</b>
+&nbsp;                MoveDirection.UP,
+<b class="nc">&nbsp;                new Animation&lt;&gt;(0.12f, game.playerTextureAtlas.createSprites(&quot;walk_up&quot;), Animation.PlayMode.LOOP));</b>
+<b class="nc">&nbsp;        playerAnimations.animations.put(</b>
+&nbsp;                MoveDirection.DOWN,
+<b class="nc">&nbsp;                new Animation&lt;&gt;(0.12f, game.playerTextureAtlas.createSprites(&quot;walk_down&quot;), Animation.PlayMode.LOOP));</b>
+<b class="nc">&nbsp;        playerAnimations.animations.put(</b>
+&nbsp;                MoveDirection.LEFT,
+<b class="nc">&nbsp;                new Animation&lt;&gt;(0.12f, game.playerTextureAtlas.createSprites(&quot;walk_left&quot;), Animation.PlayMode.LOOP));</b>
+<b class="nc">&nbsp;        playerAnimations.animations.put(</b>
+&nbsp;                MoveDirection.RIGHT,
+<b class="nc">&nbsp;                new Animation&lt;&gt;(0.12f, game.playerTextureAtlas.createSprites(&quot;walk_right&quot;), Animation.PlayMode.LOOP));</b>
+&nbsp;
+<b class="nc">&nbsp;        return engine.createEntity()</b>
+<b class="nc">&nbsp;                .add(new PlayerComponent())</b>
+<b class="nc">&nbsp;                .add(playerAnimations)</b>
+<b class="nc">&nbsp;                .add(new FixtureComponent(initPlayerBody()));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render(float delta) {
+&nbsp;        // Allow the final interaction (day transition) to complete before showing the end screen
+<b class="nc">&nbsp;        if (gameState.daysRemaining == 0 &amp;&amp; gameState.interactionOverlay == null) {</b>
+<b class="nc">&nbsp;            game.setState(HeslingtonHustle.State.END_SCREEN);</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        ScreenUtils.clear(0, 0, 0, 1);</b>
+&nbsp;
+&nbsp;        // This makes transpacency work properly
+<b class="nc">&nbsp;        Gdx.gl.glEnable(GL30.GL_BLEND);</b>
+<b class="nc">&nbsp;        Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);</b>
+&nbsp;
+<b class="nc">&nbsp;        game.spriteBatch.setProjectionMatrix(camera.combined);</b>
+<b class="nc">&nbsp;        game.spriteBatch.begin();</b>
+&nbsp;
+<b class="nc">&nbsp;        engine.update(delta);</b>
+<b class="nc">&nbsp;        if (game.physicsDebug) {</b>
+<b class="nc">&nbsp;            debugRenderer.render(world, camera.combined);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        game.spriteBatch.end();</b>
+&nbsp;
+<b class="nc">&nbsp;        stage.act();</b>
+<b class="nc">&nbsp;        stage.draw();</b>
+&nbsp;
+<b class="nc">&nbsp;        world.step(delta, 8, 3);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void resize(int width, int height) {
+<b class="nc">&nbsp;        viewport.update(width, height, true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void show() {}</b>
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void pause() {}</b>
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void resume() {}</b>
+&nbsp;
+&nbsp;    @Override
+<b class="nc">&nbsp;    public void hide() {}</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        stage.dispose();</b>
+<b class="nc">&nbsp;        world.dispose();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

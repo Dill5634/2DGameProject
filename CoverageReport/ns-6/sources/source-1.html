@@ -1,0 +1,188 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > AnimationSystem</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6.systems</a>
+</div>
+
+<h1>Coverage Summary for Class: AnimationSystem (io.github.uoyeng1g6.systems)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AnimationSystem</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6.systems;
+&nbsp;
+&nbsp;import com.badlogic.ashley.core.ComponentMapper;
+&nbsp;import com.badlogic.ashley.core.Entity;
+&nbsp;import com.badlogic.ashley.core.Family;
+&nbsp;import com.badlogic.ashley.systems.IteratingSystem;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import io.github.uoyeng1g6.components.AnimationComponent;
+&nbsp;import io.github.uoyeng1g6.components.FixtureComponent;
+&nbsp;import io.github.uoyeng1g6.components.PositionComponent;
+&nbsp;import io.github.uoyeng1g6.models.GameState;
+&nbsp;
+&nbsp;/**
+&nbsp; * System that draws animated entities. In order for an entity to be animate-able it must have an
+&nbsp; * {@link AnimationComponent}, as well as either a {@link FixtureComponent} or {@link PositionComponent}.
+&nbsp; */
+&nbsp;public class AnimationSystem extends IteratingSystem {
+&nbsp;    /**
+&nbsp;     * The sprite batch to use to draw the animation frames.
+&nbsp;     */
+&nbsp;    private final SpriteBatch batch;
+&nbsp;    /**
+&nbsp;     * The game state.
+&nbsp;     */
+&nbsp;    private final GameState gameState;
+&nbsp;
+<b class="nc">&nbsp;    private final ComponentMapper&lt;AnimationComponent&gt; am = ComponentMapper.getFor(AnimationComponent.class);</b>
+<b class="nc">&nbsp;    private final ComponentMapper&lt;FixtureComponent&gt; fm = ComponentMapper.getFor(FixtureComponent.class);</b>
+<b class="nc">&nbsp;    private final ComponentMapper&lt;PositionComponent&gt; pm = ComponentMapper.getFor(PositionComponent.class);</b>
+&nbsp;
+&nbsp;    public AnimationSystem(SpriteBatch batch, GameState gameState) {
+<b class="nc">&nbsp;        super(Family.all(AnimationComponent.class)</b>
+<b class="nc">&nbsp;                .one(PositionComponent.class, FixtureComponent.class)</b>
+<b class="nc">&nbsp;                .get());</b>
+&nbsp;
+<b class="nc">&nbsp;        this.batch = batch;</b>
+<b class="nc">&nbsp;        this.gameState = gameState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void update(float deltaTime) {
+<b class="nc">&nbsp;        if (gameState.interactionOverlay != null) {</b>
+&nbsp;            // Don&#39;t show animations beneath interaction overlay
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        super.update(deltaTime);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    protected void processEntity(Entity entity, float deltaTime) {
+<b class="nc">&nbsp;        var ac = am.get(entity);</b>
+&nbsp;
+<b class="nc">&nbsp;        if (ac.currentAnimation == -1) {</b>
+&nbsp;            // This item is currently invisible
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        var animation = ac.animations.get(ac.currentAnimation);</b>
+<b class="nc">&nbsp;        if (animation == null) {</b>
+<b class="nc">&nbsp;            throw new IllegalStateException(&quot;current animation does not map to an animation&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        ac.time += deltaTime;</b>
+<b class="nc">&nbsp;        var sprite = animation.getKeyFrame(ac.time);</b>
+&nbsp;
+<b class="nc">&nbsp;        var pc = pm.get(entity);</b>
+<b class="nc">&nbsp;        if (pc != null) {</b>
+<b class="nc">&nbsp;            batch.draw(sprite, pc.x, pc.y, sprite.getWidth() * ac.spriteScale, sprite.getHeight() * ac.spriteScale);</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        var fc = fm.get(entity);</b>
+<b class="nc">&nbsp;        if (fc != null) {</b>
+<b class="nc">&nbsp;            var body = fc.fixture.getBody();</b>
+<b class="nc">&nbsp;            batch.draw(</b>
+&nbsp;                    sprite,
+<b class="nc">&nbsp;                    body.getPosition().x - (float) body.getUserData(),</b>
+<b class="nc">&nbsp;                    body.getPosition().y - (float) body.getUserData(),</b>
+<b class="nc">&nbsp;                    sprite.getWidth() * ac.spriteScale,</b>
+<b class="nc">&nbsp;                    sprite.getHeight() * ac.spriteScale);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

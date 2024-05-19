@@ -1,6 +1,6 @@
 ANON 5.571429
-null 0.0
-null 0.0
+ANON 4.4285717
+ANON 2.0
 null 0.0
 null 0.0
 null 0.0

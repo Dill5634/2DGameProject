@@ -1,0 +1,263 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > LeaderBoard</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6.models</a>
+</div>
+
+<h1>Coverage Summary for Class: LeaderBoard (io.github.uoyeng1g6.models)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LeaderBoard</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    79.1%
+  </span>
+  <span class="absValue">
+    (34/43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LeaderBoard$Entry</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    82.7%
+  </span>
+  <span class="absValue">
+    (43/52)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6.models;
+&nbsp;
+&nbsp;import java.io.FileWriter;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.Scanner;
+&nbsp;
+&nbsp;public class LeaderBoard {
+&nbsp;    private String read;
+&nbsp;
+<b class="fc">&nbsp;    private ArrayList&lt;Entry&gt; board = new ArrayList&lt;Entry&gt;();</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public LeaderBoard(){</b>
+&nbsp;        try {
+&nbsp;            // creates filler leaderboard on first run
+<b class="fc">&nbsp;            File notes = new File(&quot;leaderboard.txt&quot;);</b>
+<b class="fc">&nbsp;            if (notes.createNewFile()) {</b>
+<b class="fc">&nbsp;                for(int x = 0; x&lt;10;x++){</b>
+<b class="fc">&nbsp;                    board.add(new Entry(&quot;null&quot;,0f));</b>
+&nbsp;                }
+&nbsp;                // writes new filler leaderboard oto
+<b class="fc">&nbsp;                write();</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                readAndAssign(notes);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;An error occurred.&quot;);</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean insert(String name,float score){
+&nbsp;
+<b class="fc">&nbsp;        if(score &lt; board.get(9).getScore()) return false;</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        Entry currentGame = new Entry(name,score);</b>
+<b class="fc">&nbsp;        board.add(currentGame);</b>
+<b class="fc">&nbsp;        board.sort(</b>
+<b class="fc">&nbsp;                (b, a) -&gt; a.getScore().compareTo(b.getScore()));</b>
+<b class="fc">&nbsp;        board.remove(10);</b>
+<b class="fc">&nbsp;        write();</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public String[] show(int x){
+<b class="fc">&nbsp;        String score2Decimals = String.format(&quot;%.2f&quot;, board.get(x).getScore());</b>
+<b class="fc">&nbsp;        return new String[]{board.get(x).getNickname(), score2Decimals};</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // reads leaderboard from file
+&nbsp;    private void readAndAssign(File notes){
+&nbsp;        try {
+<b class="fc">&nbsp;            Scanner reader = new Scanner(notes);</b>
+<b class="fc">&nbsp;            board = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            for(int x= 0;x&lt;10;x++){</b>
+&nbsp;
+<b class="fc">&nbsp;                String[] nameAndScore = reader.nextLine().split(&quot; &quot;);</b>
+<b class="fc">&nbsp;                board.add(new Entry(nameAndScore[0], Float.parseFloat(nameAndScore[1])));</b>
+&nbsp;
+&nbsp;            }
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;An error occurred.&quot;);</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;    // writes new leaderboard to file
+&nbsp;    private void write(){
+<b class="fc">&nbsp;        StringBuilder toBeWritten = new StringBuilder();</b>
+<b class="fc">&nbsp;        for(Entry x: this.board){</b>
+<b class="fc">&nbsp;            toBeWritten.append(x.getNickname()).append(&quot; &quot;).append(x.getScore());</b>
+<b class="fc">&nbsp;            toBeWritten.append(System.lineSeparator());</b>
+&nbsp;
+<b class="fc">&nbsp;        }</b>
+&nbsp;        try {
+&nbsp;
+<b class="fc">&nbsp;            FileWriter writer = new FileWriter(&quot;leaderboard.txt&quot;,false);</b>
+<b class="fc">&nbsp;            writer.write(toBeWritten.toString());</b>
+<b class="fc">&nbsp;            writer.close();</b>
+<b class="nc">&nbsp;        } catch (IOException e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;An error occurred.&quot;);</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public class Entry {
+&nbsp;
+<b class="fc">&nbsp;        public Entry(String nickname, Float score){</b>
+<b class="fc">&nbsp;            this.nickname = nickname;</b>
+<b class="fc">&nbsp;            this.score = score;</b>
+&nbsp;
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        public Entry(Float score){</b>
+<b class="fc">&nbsp;            this.nickname = &quot;YOU&quot;;</b>
+<b class="fc">&nbsp;            this.score = score;</b>
+&nbsp;
+&nbsp;
+&nbsp;        }
+&nbsp;
+&nbsp;        public void setNickname(String nickname) {
+<b class="fc">&nbsp;            this.nickname = nickname;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        String nickname;
+&nbsp;        Float score;
+&nbsp;
+&nbsp;        public Float getScore() {
+<b class="fc">&nbsp;            return score;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        public String getNickname() {
+<b class="fc">&nbsp;            return nickname;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

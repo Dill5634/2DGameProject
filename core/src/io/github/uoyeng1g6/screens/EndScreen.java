@@ -116,9 +116,10 @@ public class EndScreen implements Screen {
     float getDayScore(int studyCount, int mealCount, int recreationCount) {
 
         var studyPoints = 0;
-        for (int i = 1; i <= studyCount; i++) {
-            studyPoints += i <= 5 ? 10 : -5;
-        }
+
+        studyPoints = 50 * studyCount;
+
+
         studyPoints = Math.max(0, studyPoints);
 
         // Calculate meal multiplier

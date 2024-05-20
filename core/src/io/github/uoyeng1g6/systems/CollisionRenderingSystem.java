@@ -2,23 +2,21 @@ package io.github.uoyeng1g6.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.*;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import io.github.uoyeng1g6.constants.GameConstants;
 import io.github.uoyeng1g6.models.GameState;
 
 public class CollisionRenderingSystem extends EntitySystem {
 
-    private final static float ppt = GameConstants.PIXELS_PER_TILE;
+    private static final float ppt = GameConstants.PIXELS_PER_TILE;
 
-    public CollisionRenderingSystem(GameState gameState) {
-
-    }
+    public CollisionRenderingSystem(GameState gameState) {}
 
     public static Array<Body> RenderCollisionBodies(TiledMap map, World world) {
 
@@ -26,30 +24,29 @@ public class CollisionRenderingSystem extends EntitySystem {
 
         Array<Body> bodies = new Array<Body>();
 
-        for(MapObject object : objects) {
+        for (MapObject object : objects) {
 
-            if (object instanceof TextureMapObject){continue;}
+            if (object instanceof TextureMapObject) {
+                continue;
+            }
 
             Array<Shape> shapes = new Array<>();
 
-            if (object instanceof RectangleMapObject){
-                shapes.add(getRectangle((RectangleMapObject)object));
-            }
-            else if (object instanceof PolygonMapObject){
-                shapes.add(getPolygon((PolygonMapObject)object));
-            }
-            else if (object instanceof PolylineMapObject){
-                shapes.add(getPolyline((PolylineMapObject)object));
-            }
-            else if (object instanceof CircleMapObject){
-                shapes.add(getCircle((CircleMapObject)object));
-            }
-            else if (object instanceof EllipseMapObject){
+            if (object instanceof RectangleMapObject) {
+                shapes.add(getRectangle((RectangleMapObject) object));
+            } else if (object instanceof PolygonMapObject) {
+                shapes.add(getPolygon((PolygonMapObject) object));
+            } else if (object instanceof PolylineMapObject) {
+                shapes.add(getPolyline((PolylineMapObject) object));
+            } else if (object instanceof CircleMapObject) {
+                shapes.add(getCircle((CircleMapObject) object));
+            } else if (object instanceof EllipseMapObject) {
 
-                //shapes.addAll(getEllipse((EllipseMapObject)object));
+                // shapes.addAll(getEllipse((EllipseMapObject)object));
 
+            } else {
+                continue;
             }
-            else {continue;}
 
             BodyDef bodyD = new BodyDef();
             bodyD.type = BodyDef.BodyType.StaticBody;
@@ -68,12 +65,9 @@ public class CollisionRenderingSystem extends EntitySystem {
     private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
         Rectangle rectangle = rectangleObject.getRectangle();
         PolygonShape polygon = new PolygonShape();
-        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / ppt,
-                (rectangle.y + rectangle.height * 0.5f ) / ppt);
-        polygon.setAsBox(rectangle.width * 0.5f / ppt,
-                rectangle.height * 0.5f / ppt,
-                size,
-                0.0f);
+        Vector2 size = new Vector2(
+                (rectangle.x + rectangle.width * 0.5f) / ppt, (rectangle.y + rectangle.height * 0.5f) / ppt);
+        polygon.setAsBox(rectangle.width * 0.5f / ppt, rectangle.height * 0.5f / ppt, size, 0.0f);
         return polygon;
     }
 
@@ -105,8 +99,13 @@ public class CollisionRenderingSystem extends EntitySystem {
         float innerRad;
         float outerRad;
 
-        if (ellipse.height >= ellipse.width) {innerRad = ellipse.width; outerRad = ellipse.height;}
-        else {innerRad = ellipse.height; outerRad = ellipse.width;}
+        if (ellipse.height >= ellipse.width) {
+            innerRad = ellipse.width;
+            outerRad = ellipse.height;
+        } else {
+            innerRad = ellipse.height;
+            outerRad = ellipse.width;
+        }
 
         // circle part
         CircleShape circleShape = new CircleShape();
@@ -151,6 +150,5 @@ public class CollisionRenderingSystem extends EntitySystem {
         ChainShape chain = new ChainShape();
         chain.createChain(worldVertices);
         return chain;
-
     }
 }

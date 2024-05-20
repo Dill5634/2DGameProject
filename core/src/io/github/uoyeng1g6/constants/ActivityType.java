@@ -15,13 +15,12 @@ public enum ActivityType {
     LIBRARY,
     CSBUILDING,
 
-
     RECREATION,
     DUCKS,
     WALK,
     ;
 
-    public static final EnumSet<ActivityType> EAT = EnumSet.of(SPOONS,PIAZZA,GLASSHOUSE);
-    public static final EnumSet<ActivityType> WORK = EnumSet.of(STUDY,LIBRARY,CSBUILDING);
-    public static final EnumSet<ActivityType> PLAY = EnumSet.of(RECREATION,DUCKS,WALK);
-    }
+    public static final EnumSet<ActivityType> EAT = EnumSet.of(SPOONS, PIAZZA, GLASSHOUSE);
+    public static final EnumSet<ActivityType> WORK = EnumSet.of(STUDY, LIBRARY, CSBUILDING);
+    public static final EnumSet<ActivityType> PLAY = EnumSet.of(RECREATION, DUCKS, WALK);
+}

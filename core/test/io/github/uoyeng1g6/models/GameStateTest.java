@@ -25,6 +25,7 @@ class GameStateTest {
 
         //check new days are added
         assertFalse(state.days.isEmpty());
+        assertNotNull(state.days.get(0));
 
         //check resets energy to maximum
         assertEquals(state.energyRemaining, GameConstants.MAX_ENERGY);
@@ -40,7 +41,6 @@ class GameStateTest {
 
         //perform activity with sufficient energy and time
         assertTrue(state.doActivity(1,1, ActivityType.WALK,"test", new Vector2(0,0)));
-        //System.out.println(state.currentDay.activityStats);
         //check counter updated
         assertEquals(state.currentDay.activityStats.get(ActivityType.WALK), 1);
         //check hours updated
@@ -72,7 +72,6 @@ class GameStateTest {
         state.doActivity(1,1, ActivityType.LIBRARY,"test", new Vector2(0,0));
         assertEquals(state.getTotalActivityCount(ActivityType.SPOONS),1);
         assertEquals(state.getTotalActivityCount(ActivityType.LIBRARY),1);
-
         assertEquals(state.getTotalActivityCount(ActivityType.EAT), 1);
     }
 
@@ -83,6 +82,7 @@ class GameStateTest {
             state.advanceDay(new Vector2(0,0));
         }
         assertEquals(true, state.streaks[0]);
-        assertEquals(false, state.streaks[1]);
+        for (int i = 1; i < state.streaks.length; i++)
+            assertEquals(false, state.streaks[i]);
     }
 }

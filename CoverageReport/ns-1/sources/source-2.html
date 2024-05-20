@@ -1,0 +1,346 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > HeslingtonHustle</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6</a>
+</div>
+
+<h1>Coverage Summary for Class: HeslingtonHustle (io.github.uoyeng1g6)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HeslingtonHustle</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/53)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">HeslingtonHustle$State</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/57)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6;
+&nbsp;
+&nbsp;import com.badlogic.gdx.Game;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.graphics.Color;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.BitmapFont;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+&nbsp;import com.badlogic.gdx.graphics.g2d.TextureRegion;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+&nbsp;import com.badlogic.gdx.physics.box2d.Box2D;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+&nbsp;import io.github.uoyeng1g6.screens.EndScreen;
+&nbsp;import io.github.uoyeng1g6.screens.MainMenu;
+&nbsp;import io.github.uoyeng1g6.screens.Playing;
+&nbsp;import space.earlygrey.shapedrawer.ShapeDrawer;
+&nbsp;
+&nbsp;/**
+&nbsp; * The main game class. Handles the switching between different screens as well as most of the asset
+&nbsp; * loading and cleanup that is required for the rest of the game.
+&nbsp; */
+&nbsp;public class HeslingtonHustle extends Game {
+&nbsp;    /**
+&nbsp;     * Enum representing all possible game states.
+&nbsp;     */
+<b class="nc">&nbsp;    public enum State {</b>
+&nbsp;        /**
+&nbsp;         * The game is currently on the main menu screen.
+&nbsp;         */
+<b class="nc">&nbsp;        MAIN_MENU,</b>
+&nbsp;        /**
+&nbsp;         * The game is currently being played.
+&nbsp;         */
+<b class="nc">&nbsp;        PLAYING,</b>
+&nbsp;        /**
+&nbsp;         * The game is currently on the game over screen.
+&nbsp;         */
+<b class="nc">&nbsp;        END_SCREEN</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Whether debug mode is enabled - if {@code true} then hitbox outlines will be shown for the player
+&nbsp;     * and any interactables, as well as showing layout debug lines for {@code scene2d.ui}.
+&nbsp;     */
+&nbsp;    public final boolean debug;
+&nbsp;    /**
+&nbsp;     * Whether physics debug mode is enabled - if {@code true} then hitbox outlines will be shown for any physics
+&nbsp;     * objects handled by {@code box2d}.
+&nbsp;     */
+&nbsp;    public final boolean physicsDebug;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The skin to use when rendering {@code scene2d.ui} components.
+&nbsp;     */
+&nbsp;    public Skin skin;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Texture atlas containing all images for the player&#39;s sprite.
+&nbsp;     */
+&nbsp;    public TextureAtlas playerTextureAtlas;
+&nbsp;    /**
+&nbsp;     * Texture atlas containing all icons used to mark interaction locations on the map.
+&nbsp;     */
+&nbsp;    public TextureAtlas interactionIconsTextureAtlas;
+&nbsp;    /**
+&nbsp;     * Texture which is just a single white pixel. Required for {@link ShapeDrawer} to work properly.
+&nbsp;     */
+&nbsp;    public Texture whitePixel;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The tilemap to use for the game&#39;s background.
+&nbsp;     */
+&nbsp;    public TiledMap tiledMap;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The font to use when rendering tooltips.
+&nbsp;     */
+&nbsp;    public BitmapFont tooltipFont;
+&nbsp;    /**
+&nbsp;     * The font to use when rendering the screen overlay that is drawn while an interaction is in progress.
+&nbsp;     */
+&nbsp;    public BitmapFont overlayFont;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The global spritebatch to use for the game.
+&nbsp;     */
+&nbsp;    public SpriteBatch spriteBatch;
+&nbsp;    /**
+&nbsp;     * The global shapedrawer to use for the game.
+&nbsp;     */
+&nbsp;    public ShapeDrawer shapeDrawer;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The main menu screen instance.
+&nbsp;     */
+&nbsp;    MainMenu mainMenu;
+&nbsp;    /**
+&nbsp;     * The gameplay screen instance. A new one is required to be created each time the
+&nbsp;     * player starts a new game.
+&nbsp;     */
+<b class="nc">&nbsp;    Playing playing = null;</b>
+&nbsp;    /**
+&nbsp;     * The end screen instance. A new one is required to be create each time the
+&nbsp;     * player finishes a game.
+&nbsp;     */
+<b class="nc">&nbsp;    EndScreen endScreen = null;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The game&#39;s current state.
+&nbsp;     */
+<b class="nc">&nbsp;    private State currentState = State.MAIN_MENU;</b>
+&nbsp;
+<b class="nc">&nbsp;    public HeslingtonHustle() {</b>
+&nbsp;        // Properties retrieved from command-line to allow enabling of different debug modes to help with development
+<b class="nc">&nbsp;        debug = System.getProperty(&quot;game.debug&quot;, &quot;false&quot;).equals(&quot;true&quot;);</b>
+<b class="nc">&nbsp;        physicsDebug = System.getProperty(&quot;game.physicsDebug&quot;, &quot;false&quot;).equals(&quot;true&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Quit the game to desktop.
+&nbsp;     */
+&nbsp;    public void quit() {
+<b class="nc">&nbsp;        Gdx.app.exit();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the current game state. Handles switching between the different screens and cleanup between
+&nbsp;     * screen changes.
+&nbsp;     *
+&nbsp;     * @param state the state that the game should transition to.
+&nbsp;     */
+&nbsp;    public void setState(State state) {
+<b class="nc">&nbsp;        switch (state) {</b>
+&nbsp;            case MAIN_MENU:
+<b class="nc">&nbsp;                this.setScreen(mainMenu);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case PLAYING:
+<b class="nc">&nbsp;                if (playing != null) {</b>
+<b class="nc">&nbsp;                    playing.dispose();</b>
+&nbsp;                }
+<b class="nc">&nbsp;                playing = new Playing(this);</b>
+<b class="nc">&nbsp;                this.setScreen(playing);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case END_SCREEN:
+<b class="nc">&nbsp;                if (endScreen != null) {</b>
+<b class="nc">&nbsp;                    endScreen.dispose();</b>
+&nbsp;                }
+<b class="nc">&nbsp;                endScreen = new EndScreen(this, playing.getGameState());</b>
+<b class="nc">&nbsp;                this.setScreen(endScreen);</b>
+&nbsp;                break;
+&nbsp;        }
+<b class="nc">&nbsp;        currentState = state;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void create() {
+<b class="nc">&nbsp;        Box2D.init();</b>
+&nbsp;
+<b class="nc">&nbsp;        skin = new Skin(Gdx.files.internal(&quot;skins/default/uiskin.json&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        playerTextureAtlas = new TextureAtlas(Gdx.files.internal(&quot;sprites/player.txt&quot;));</b>
+<b class="nc">&nbsp;        interactionIconsTextureAtlas = new TextureAtlas(Gdx.files.internal(&quot;sprites/interaction_icons.txt&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;        tiledMap = new TmxMapLoader().load(&quot;maps/campus-east.tmx&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        tooltipFont = new BitmapFont();</b>
+<b class="nc">&nbsp;        tooltipFont.getData().setScale(0.07f);</b>
+<b class="nc">&nbsp;        tooltipFont.setUseIntegerPositions(false);</b>
+<b class="nc">&nbsp;        tooltipFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);</b>
+<b class="nc">&nbsp;        tooltipFont.setColor(Color.BLACK);</b>
+&nbsp;
+<b class="nc">&nbsp;        overlayFont = new BitmapFont();</b>
+<b class="nc">&nbsp;        overlayFont.getData().setScale(0.2f);</b>
+<b class="nc">&nbsp;        overlayFont.setUseIntegerPositions(false);</b>
+<b class="nc">&nbsp;        overlayFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);</b>
+<b class="nc">&nbsp;        overlayFont.setColor(Color.WHITE);</b>
+&nbsp;
+<b class="nc">&nbsp;        spriteBatch = new SpriteBatch();</b>
+<b class="nc">&nbsp;        whitePixel = new Texture(Gdx.files.internal(&quot;white_pixel.png&quot;));</b>
+<b class="nc">&nbsp;        shapeDrawer = new ShapeDrawer(spriteBatch, new TextureRegion(whitePixel, 0, 0, 1, 1));</b>
+&nbsp;
+<b class="nc">&nbsp;        mainMenu = new MainMenu(this);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.setScreen(mainMenu);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void render() {
+<b class="nc">&nbsp;        super.render();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        mainMenu.dispose();</b>
+&nbsp;
+<b class="nc">&nbsp;        if (playing != null) {</b>
+<b class="nc">&nbsp;            playing.dispose();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (endScreen != null) {</b>
+<b class="nc">&nbsp;            endScreen.dispose();</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        skin.dispose();</b>
+&nbsp;
+<b class="nc">&nbsp;        playerTextureAtlas.dispose();</b>
+<b class="nc">&nbsp;        interactionIconsTextureAtlas.dispose();</b>
+<b class="nc">&nbsp;        whitePixel.dispose();</b>
+&nbsp;
+<b class="nc">&nbsp;        tiledMap.dispose();</b>
+&nbsp;
+<b class="nc">&nbsp;        tooltipFont.dispose();</b>
+<b class="nc">&nbsp;        spriteBatch.dispose();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

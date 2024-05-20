@@ -27,5 +27,7 @@ public class MapRenderingSystem extends EntitySystem {
         renderer.render();
     }
 
-    public TiledMap getTiledMap() {return renderer.getMap();}
+    public TiledMap getTiledMap() {
+        return renderer.getMap();
+    }
 }

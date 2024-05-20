@@ -1,0 +1,260 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > CollisionRenderingSystem</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6.systems</a>
+</div>
+
+<h1>Coverage Summary for Class: CollisionRenderingSystem (io.github.uoyeng1g6.systems)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CollisionRenderingSystem</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/60)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6.systems;
+&nbsp;
+&nbsp;import com.badlogic.ashley.core.EntitySystem;
+&nbsp;import com.badlogic.gdx.maps.MapObject;
+&nbsp;import com.badlogic.gdx.maps.objects.*;
+&nbsp;import com.badlogic.gdx.math.*;
+&nbsp;import com.badlogic.gdx.physics.box2d.*;
+&nbsp;import com.badlogic.gdx.utils.Array;
+&nbsp;import com.badlogic.gdx.utils.Array.ArrayIterator;
+&nbsp;import com.badlogic.gdx.maps.MapObjects;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import io.github.uoyeng1g6.constants.GameConstants;
+&nbsp;import io.github.uoyeng1g6.models.GameState;
+&nbsp;
+&nbsp;public class CollisionRenderingSystem extends EntitySystem {
+&nbsp;
+&nbsp;    private final static float ppt = GameConstants.PIXELS_PER_TILE;
+&nbsp;
+<b class="nc">&nbsp;    public CollisionRenderingSystem(GameState gameState) {</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Array&lt;Body&gt; RenderCollisionBodies(TiledMap map, World world) {
+&nbsp;
+<b class="nc">&nbsp;        MapObjects objects = map.getLayers().get(&quot;Collision&quot;).getObjects();</b>
+&nbsp;
+<b class="nc">&nbsp;        Array&lt;Body&gt; bodies = new Array&lt;Body&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for(MapObject object : objects) {</b>
+&nbsp;
+<b class="nc">&nbsp;            if (object instanceof TextureMapObject){continue;}</b>
+&nbsp;
+<b class="nc">&nbsp;            Array&lt;Shape&gt; shapes = new Array&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;            if (object instanceof RectangleMapObject){</b>
+<b class="nc">&nbsp;                shapes.add(getRectangle((RectangleMapObject)object));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (object instanceof PolygonMapObject){</b>
+<b class="nc">&nbsp;                shapes.add(getPolygon((PolygonMapObject)object));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (object instanceof PolylineMapObject){</b>
+<b class="nc">&nbsp;                shapes.add(getPolyline((PolylineMapObject)object));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (object instanceof CircleMapObject){</b>
+<b class="nc">&nbsp;                shapes.add(getCircle((CircleMapObject)object));</b>
+&nbsp;            }
+<b class="nc">&nbsp;            else if (object instanceof EllipseMapObject){</b>
+&nbsp;
+&nbsp;                //shapes.addAll(getEllipse((EllipseMapObject)object));
+&nbsp;
+&nbsp;            }
+&nbsp;            else {continue;}
+&nbsp;
+<b class="nc">&nbsp;            BodyDef bodyD = new BodyDef();</b>
+<b class="nc">&nbsp;            bodyD.type = BodyDef.BodyType.StaticBody;</b>
+<b class="nc">&nbsp;            Body body = world.createBody(bodyD);</b>
+<b class="nc">&nbsp;            bodies.add(body);</b>
+&nbsp;
+<b class="nc">&nbsp;            ArrayIterator&lt;Shape&gt; iterator = new ArrayIterator&lt;Shape&gt;(shapes);</b>
+<b class="nc">&nbsp;            while (iterator.hasNext()) {</b>
+<b class="nc">&nbsp;                body.createFixture(iterator.next(), 0.0f);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            iterator.forEach(Shape::dispose);</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return bodies;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
+<b class="nc">&nbsp;        Rectangle rectangle = rectangleObject.getRectangle();</b>
+<b class="nc">&nbsp;        PolygonShape polygon = new PolygonShape();</b>
+<b class="nc">&nbsp;        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / ppt,</b>
+&nbsp;                (rectangle.y + rectangle.height * 0.5f ) / ppt);
+<b class="nc">&nbsp;        polygon.setAsBox(rectangle.width * 0.5f / ppt,</b>
+&nbsp;                rectangle.height * 0.5f / ppt,
+&nbsp;                size,
+&nbsp;                0.0f);
+<b class="nc">&nbsp;        return polygon;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static CircleShape getCircle(CircleMapObject circleObject) {
+<b class="nc">&nbsp;        Circle circle = circleObject.getCircle();</b>
+<b class="nc">&nbsp;        CircleShape circleShape = new CircleShape();</b>
+<b class="nc">&nbsp;        circleShape.setRadius(circle.radius / ppt);</b>
+<b class="nc">&nbsp;        circleShape.setPosition(new Vector2(circle.x / ppt, circle.y / ppt));</b>
+<b class="nc">&nbsp;        return circleShape;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static PolygonShape getPolygon(PolygonMapObject polygonObject) {
+<b class="nc">&nbsp;        PolygonShape polygon = new PolygonShape();</b>
+<b class="nc">&nbsp;        float[] vertices = polygonObject.getPolygon().getTransformedVertices();</b>
+&nbsp;
+<b class="nc">&nbsp;        float[] worldVertices = new float[vertices.length];</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; vertices.length; ++i) {</b>
+<b class="nc">&nbsp;            worldVertices[i] = vertices[i] / ppt;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        polygon.set(worldVertices);</b>
+<b class="nc">&nbsp;        return polygon;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static Shape[] getEllipse(EllipseMapObject ellipseObject) {
+&nbsp;
+<b class="nc">&nbsp;        Ellipse ellipse = ellipseObject.getEllipse();</b>
+&nbsp;        float innerRad;
+&nbsp;        float outerRad;
+&nbsp;
+<b class="nc">&nbsp;        if (ellipse.height &gt;= ellipse.width) {innerRad = ellipse.width; outerRad = ellipse.height;}</b>
+<b class="nc">&nbsp;        else {innerRad = ellipse.height; outerRad = ellipse.width;}</b>
+&nbsp;
+&nbsp;        // circle part
+<b class="nc">&nbsp;        CircleShape circleShape = new CircleShape();</b>
+<b class="nc">&nbsp;        circleShape.setRadius(innerRad);</b>
+<b class="nc">&nbsp;        circleShape.setPosition(new Vector2(ellipse.x / ppt, ellipse.y / ppt));</b>
+&nbsp;
+<b class="nc">&nbsp;        Shape[] result = new Shape[1];</b>
+<b class="nc">&nbsp;        result[0] = circleShape;</b>
+<b class="nc">&nbsp;        return result;</b>
+&nbsp;
+&nbsp;        /* chain part
+&nbsp;        ChainShape chainShape = new ChainShape();
+&nbsp;        Vector2[] worldVertices = new Vector2[32];
+&nbsp;        int divisions = 32;
+&nbsp;        for (int i =0; i &lt; divisions; i++){
+&nbsp;            float angle = (float)((Math.PI*2/divisions)*i);
+&nbsp;
+&nbsp;            float x = (float)(outerRad*Math.cos(angle));
+&nbsp;            float y = (float)(outerRad*Math.sin(angle));
+&nbsp;            assert false;
+&nbsp;            worldVertices[i] = (new Vector2(x, y));
+&nbsp;        }
+&nbsp;        chainShape.createChain(worldVertices);
+&nbsp;        Shape[] returnValue = new Shape[2];
+&nbsp;        returnValue[0] = chainShape;
+&nbsp;        returnValue[1] = circleShape;
+&nbsp;        System.out.println(&quot;chainShape: &quot; + returnValue[0]);
+&nbsp;        System.out.println(&quot;circleShape: &quot; + returnValue[1]);
+&nbsp;        return returnValue; */
+&nbsp;    }
+&nbsp;
+&nbsp;    private static ChainShape getPolyline(PolylineMapObject polylineObject) {
+<b class="nc">&nbsp;        float[] vertices = polylineObject.getPolyline().getTransformedVertices();</b>
+<b class="nc">&nbsp;        Vector2[] worldVertices = new Vector2[vertices.length / 2];</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; vertices.length / 2; ++i) {</b>
+<b class="nc">&nbsp;            worldVertices[i] = new Vector2();</b>
+<b class="nc">&nbsp;            worldVertices[i].x = vertices[i * 2] / ppt;</b>
+<b class="nc">&nbsp;            worldVertices[i].y = vertices[i * 2 + 1] / ppt;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        ChainShape chain = new ChainShape();</b>
+<b class="nc">&nbsp;        chain.createChain(worldVertices);</b>
+<b class="nc">&nbsp;        return chain;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

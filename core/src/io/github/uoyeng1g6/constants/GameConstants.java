@@ -19,11 +19,11 @@ public class GameConstants {
     /**
      * The width of the camera in tiles
      */
-    public static final float CAMERA_WIDTH = 130/ZOOM_FACTOR;
+    public static final float CAMERA_WIDTH = 130 / ZOOM_FACTOR;
     /**
      * The height of the camera in tiles
      */
-    public static final float CAMERA_HEIGHT = 108/ZOOM_FACTOR;
+    public static final float CAMERA_HEIGHT = 108 / ZOOM_FACTOR;
     /**
      * The pixels per tile
      */
@@ -35,7 +35,7 @@ public class GameConstants {
     /**
      *  Basic Font size for playing the game
      */
-    public static final float FONT_SIZE = 0.1f/2;
+    public static final float FONT_SIZE = 0.1f / 2;
     /**
      * The maximum amount of energy available to the player on a single day.
      */

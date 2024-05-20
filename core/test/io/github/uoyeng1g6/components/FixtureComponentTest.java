@@ -10,6 +10,7 @@ class FixtureComponentTest {
 
     @Test
     void testFixture(){
+        //create a new fixture component and check that the fixture component was assigned to it
         Fixture f = mock(Fixture.class);
         FixtureComponent fc = new FixtureComponent(f);
         assertEquals(f, fc.fixture);

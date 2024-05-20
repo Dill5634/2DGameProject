@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -19,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -38,9 +36,7 @@ import io.github.uoyeng1g6.constants.GameConstants;
 import io.github.uoyeng1g6.constants.MoveDirection;
 import io.github.uoyeng1g6.constants.PlayerConstants;
 import io.github.uoyeng1g6.models.GameState;
-import io.github.uoyeng1g6.models.PhysicsPolygon;
 import io.github.uoyeng1g6.systems.*;
-
 import java.util.Map;
 
 /**
@@ -77,7 +73,6 @@ public class Playing implements Screen {
     Box2DDebugRenderer debugRenderer = null;
 
     CameraFollowSystem cameraFollowSystem;
-
 
     public Playing(HeslingtonHustle game) {
         this.game = game;
@@ -223,8 +218,7 @@ public class Playing implements Screen {
                         dayEatLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.EAT)))));
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
-                        dayRecreationLabel,
-                        state -> String.valueOf(state.currentDay.statFor(ActivityType.PLAY)))));
+                        dayRecreationLabel, state -> String.valueOf(state.currentDay.statFor(ActivityType.PLAY)))));
 
         engine.addEntity(engine.createEntity()
                 .add(new CounterComponent(
@@ -283,7 +277,7 @@ public class Playing implements Screen {
      * @return the created entities.
      */
     Entity[] initInteractionLocations(Engine engine) {
-        final var iconSize = 2/ 128f;
+        final var iconSize = 2 / 128f;
         var ref = engine.getSystem(cameraFollowSystem.getClass());
 
         var studyIcon = game.interactionIconsTextureAtlas.findRegion("book_icon");
@@ -293,7 +287,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         55, 59, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.CSBUILDING, "Studying...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.CSBUILDING, "Studying...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -305,14 +299,11 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         101, 20, studyIcon.getRegionWidth() * iconSize, studyIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.LIBRARY, "Studying...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.LIBRARY, "Studying...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Study at Library\nTime: -1h\nEnergy: -10"));
-
-
-
 
         var foodIcon = game.interactionIconsTextureAtlas.findRegion("food_icon");
         var piazza = engine.createEntity()
@@ -321,7 +312,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         9, 74, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 5, ActivityType.PIAZZA, "Eating...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 5, ActivityType.PIAZZA, "Eating...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -333,7 +324,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         59, 25, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 5, ActivityType.GLASSHOUSE, "Eating...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 5, ActivityType.GLASSHOUSE, "Eating...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -345,28 +336,21 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         94, 65, foodIcon.getRegionWidth() * iconSize, foodIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 5, ActivityType.SPOONS, "Eating...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 5, ActivityType.SPOONS, "Eating...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Snack at Spoons\nTime: -1h\nEnergy: -5"));
-
-
-
-
-
 
         var popcornIcon = game.interactionIconsTextureAtlas.findRegion("popcorn_icon");
         var recreation = engine.createEntity()
                 .add(new TextureComponent(popcornIcon, iconSize).show())
                 .add(new PositionComponent(103, 83))
                 .add(new HitboxComponent(new Rectangle(
-                        103,
-                        83,
-                        popcornIcon.getRegionWidth() * iconSize,
-                        popcornIcon.getRegionHeight() * iconSize)))
+                        103, 83, popcornIcon.getRegionWidth() * iconSize, popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.RECREATION, "Watching films...",ref.getCameraPosition())) {
+                    if (!state.doActivity(
+                            1, 10, ActivityType.RECREATION, "Watching films...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -376,12 +360,9 @@ public class Playing implements Screen {
                 .add(new TextureComponent(popcornIcon, iconSize).show())
                 .add(new PositionComponent(16, 16))
                 .add(new HitboxComponent(new Rectangle(
-                        16,
-                        16,
-                        popcornIcon.getRegionWidth() * iconSize,
-                        popcornIcon.getRegionHeight() * iconSize)))
+                        16, 16, popcornIcon.getRegionWidth() * iconSize, popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.WALK, "Feeding ducks...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.WALK, "Feeding ducks...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
@@ -391,19 +372,13 @@ public class Playing implements Screen {
                 .add(new TextureComponent(popcornIcon, iconSize).show())
                 .add(new PositionComponent(126, 27))
                 .add(new HitboxComponent(new Rectangle(
-                        126,
-                        27,
-                        popcornIcon.getRegionWidth() * iconSize,
-                        popcornIcon.getRegionHeight() * iconSize)))
+                        126, 27, popcornIcon.getRegionWidth() * iconSize, popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.WALK, "Walking...",ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.WALK, "Walking...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))
                 .add(new TooltipComponent(game.tooltipFont, "[E] Go for a walk\nTime: -1h\nEnergy: -10"));
-
-
-
 
         var sleepIcon = game.interactionIconsTextureAtlas.findRegion("bed_icon");
         var sleep = engine.createEntity()
@@ -412,10 +387,9 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         6, 83, sleepIcon.getRegionWidth() * iconSize, sleepIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> this.gameState.advanceDay(ref.getCameraPosition())))
-
                 .add(new TooltipComponent(game.tooltipFont, "[E] Go to sleep\nEnds the current day"));
 
-        return new Entity[] {sleep, csBuilding,library, piazza,wetherspoons,glasshouse, recreation,ducks,walk};
+        return new Entity[] {sleep, csBuilding, library, piazza, wetherspoons, glasshouse, recreation, ducks, walk};
     }
 
     /**
@@ -494,8 +468,6 @@ public class Playing implements Screen {
         stage.draw();
 
         world.step(delta, 8, 3);
-
-
     }
 
     @Override

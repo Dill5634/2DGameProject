@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PhysicsPolygon</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.github.uoyeng1g6.models</a>
+</div>
+
+<h1>Coverage Summary for Class: PhysicsPolygon (io.github.uoyeng1g6.models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PhysicsPolygon</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.github.uoyeng1g6.models;
+&nbsp;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.BodyDef;
+&nbsp;
+&nbsp;/**
+&nbsp; * Dataclass model representing a physics polygon. Intended to be loaded from file
+&nbsp; * to reduce the amount of duplication needed to create many polygons in code.
+&nbsp; */
+&nbsp;public class PhysicsPolygon {
+&nbsp;    /**
+&nbsp;     * The name of the polygon.
+&nbsp;     */
+&nbsp;    private String name;
+&nbsp;    /**
+&nbsp;     * The type of the polygon. This should always be {@code StaticBody}.
+&nbsp;     */
+&nbsp;    private BodyDef.BodyType type;
+&nbsp;    /**
+&nbsp;     * The position of the polygon. This is the bottom left corner and all vertices are positioned
+&nbsp;     * relative to this point.
+&nbsp;     */
+&nbsp;    private Vector2 position;
+&nbsp;    /**
+&nbsp;     * The vertices of the polygon.
+&nbsp;     */
+&nbsp;    private Vector2[] vertices;
+&nbsp;
+<b class="fc">&nbsp;    public PhysicsPolygon() {}</b>
+&nbsp;
+<b class="fc">&nbsp;    public PhysicsPolygon(String name, BodyDef.BodyType type, Vector2 position, Vector2... vertices) {</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.type = type;</b>
+<b class="fc">&nbsp;        this.position = position;</b>
+<b class="fc">&nbsp;        this.vertices = vertices;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getName() {
+<b class="fc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BodyDef.BodyType getType() {
+<b class="fc">&nbsp;        return type;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Vector2 getPosition() {
+<b class="fc">&nbsp;        return position;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Vector2[] getVertices() {
+<b class="fc">&nbsp;        return vertices;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-05-19 14:55</div>
+</div>
+</body>
+</html>

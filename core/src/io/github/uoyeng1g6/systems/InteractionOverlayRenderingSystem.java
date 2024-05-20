@@ -66,26 +66,34 @@ public class InteractionOverlayRenderingSystem extends EntitySystem {
 
         var pos = gameState.interactionOverlay.position;
 
-
         var halfWorldWidth = GameConstants.CAMERA_WIDTH / 2;
         var halfWorldHeight = GameConstants.CAMERA_HEIGHT / 2;
-        var zeroX = pos.x-halfWorldWidth;
-        var zeroY = pos.y-halfWorldHeight;
-        shapeDrawer.filledRectangle(zeroX,zeroY , GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, OVERLAY_COLOR);
+        var zeroX = pos.x - halfWorldWidth;
+        var zeroY = pos.y - halfWorldHeight;
+        shapeDrawer.filledRectangle(
+                zeroX, zeroY, GameConstants.CAMERA_WIDTH, GameConstants.CAMERA_HEIGHT, OVERLAY_COLOR);
 
         var layout = new GlyphLayout(font, gameState.interactionOverlay.text);
-        font.draw(batch, layout,zeroX+ halfWorldWidth - (layout.width / 2), zeroY+ halfWorldHeight + (layout.height / 2));
+        font.draw(
+                batch,
+                layout,
+                zeroX + halfWorldWidth - (layout.width / 2),
+                zeroY + halfWorldHeight + (layout.height / 2));
 
         shapeDrawer.filledRectangle(
-                zeroX +halfWorldWidth - (halfWorldWidth / 2) - 0.5f,
-                zeroY+(halfWorldHeight / 2),
+                zeroX + halfWorldWidth - (halfWorldWidth / 2) - 0.5f,
+                zeroY + (halfWorldHeight / 2),
                 halfWorldWidth + 1,
                 3,
                 Color.BLACK);
 
         var progressBarSize = (elapsed / gameState.interactionOverlay.displayFor) * halfWorldWidth;
         shapeDrawer.filledRectangle(
-                zeroX+ halfWorldWidth - (halfWorldWidth / 2), zeroY+(halfWorldHeight / 2) + 0.5f, progressBarSize, 2, Color.WHITE);
+                zeroX + halfWorldWidth - (halfWorldWidth / 2),
+                zeroY + (halfWorldHeight / 2) + 0.5f,
+                progressBarSize,
+                2,
+                Color.WHITE);
 
         if (elapsed >= gameState.interactionOverlay.displayFor) {
             gameState.interactionOverlay = null;

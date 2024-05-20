@@ -156,7 +156,8 @@ public class GameState {
                      }
 
                      interactionOverlay = new InteractionOverlay("Studying... again", 1f, pos);
-                     currentDay.activityStats.merge(ActivityType.BREAKFAST, 1, Integer::sum);
+                     currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
+                     currentDay.activityStats.merge(type, 1, Integer::sum);
                      studyCatchUp = true;
                      return false;
 
@@ -187,9 +188,6 @@ public class GameState {
 
         if(ActivityType.WORK.contains(type)){
             currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
-
-
-
         }
 
         if (ActivityType.EAT.contains(type)) {

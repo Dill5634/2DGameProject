@@ -172,7 +172,7 @@ public class HeslingtonHustle extends Game {
         tooltipFont.setColor(Color.BLACK);
 
         overlayFont = new BitmapFont();
-        overlayFont.getData().setScale(0.2f);
+        overlayFont.getData().setScale(0.1f);
         overlayFont.setUseIntegerPositions(false);
         overlayFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         overlayFont.setColor(Color.WHITE);

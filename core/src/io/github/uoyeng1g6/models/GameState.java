@@ -3,8 +3,6 @@ package io.github.uoyeng1g6.models;
 import com.badlogic.gdx.math.Vector2;
 import io.github.uoyeng1g6.constants.ActivityType;
 import io.github.uoyeng1g6.constants.GameConstants;
-
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import java.util.HashMap;
  */
 public class GameState {
 
-
     /**
      * Dataclass representing a single in-game day.
      */
@@ -23,6 +20,7 @@ public class GameState {
          * Map of activity type to number of activities completed of that type.
          */
         public final HashMap<ActivityType, Integer> activityStats = new HashMap<>();
+
         public final HashMap<EnumSet<ActivityType>, Integer> setStats = new HashMap<>();
 
         /**
@@ -53,9 +51,9 @@ public class GameState {
          */
         public final float displayFor;
 
-        public  final Vector2 position;
+        public final Vector2 position;
 
-        public InteractionOverlay(String text, float displayFor,Vector2 position) {
+        public InteractionOverlay(String text, float displayFor, Vector2 position) {
             this.text = text;
             this.displayFor = displayFor;
             this.position = position;
@@ -89,33 +87,26 @@ public class GameState {
      */
     public InteractionOverlay interactionOverlay = null;
 
-    public Boolean[] streaks = {true,true,true,true,true};
-    public ActivityType[] counts = {ActivityType.DUCKS,ActivityType.WALK,ActivityType.LIBRARY,ActivityType.SPOONS,ActivityType.BREAKFAST};
+    public Boolean[] streaks = {true, true, true, true, true};
+    public ActivityType[] counts = {
+        ActivityType.DUCKS, ActivityType.WALK, ActivityType.LIBRARY, ActivityType.SPOONS, ActivityType.BREAKFAST
+    };
 
     /**
      * End and store the current day and advance to a new one. Resets the current energy and hours remaining.
      * Shows an overlay to indicate that the player is "sleeping".
      */
     public void advanceDay(Vector2 camPosition) {
-        for(int x = 0;x<5;x++){
-            if(this.streaks[x]) this.streaks[x] = currentDay.statFor(counts[x]) > 0;
-            }
-
-
-
+        for (int x = 0; x < 5; x++) {
+            if (this.streaks[x]) this.streaks[x] = currentDay.statFor(counts[x]) > 0;
+        }
 
         daysRemaining--;
         energyRemaining = GameConstants.MAX_ENERGY;
         hoursRemaining = GameConstants.MAX_HOURS;
         days.add(currentDay);
         currentDay = new Day();
-
-
-
-
-
     }
-
 
     /**
      * Do an activity. Subtracts the amount of time and energy required to do the activity and displays
@@ -130,34 +121,34 @@ public class GameState {
      */
     public boolean doActivity(int timeUsage, int energyUsage, ActivityType type, String overlayText, Vector2 pos) {
         if (hoursRemaining < timeUsage) {
-            interactionOverlay = new InteractionOverlay("NO TIME!!!", 0.5f,pos);
+            interactionOverlay = new InteractionOverlay("NO TIME!!!", 0.5f, pos);
             return false;
         }
         if (energyRemaining < energyUsage) {
-            interactionOverlay = new InteractionOverlay("NO ENERGY!!!", 0.5f,pos);
+            interactionOverlay = new InteractionOverlay("NO ENERGY!!!", 0.5f, pos);
             return false;
         }
-        System.out.println();hoursRemaining -= timeUsage;
+        System.out.println();
+        hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
 
-
-
-        if(ActivityType.WORK.contains(type)){
-            currentDay.setStats.merge(ActivityType.WORK,1,Integer::sum);
+        if (ActivityType.WORK.contains(type)) {
+            currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
         }
-        if(ActivityType.EAT.contains(type)){
-            if(currentDay.activityStats.isEmpty()){
+        if (ActivityType.EAT.contains(type)) {
+            if (currentDay.activityStats.isEmpty()) {
 
-                currentDay.activityStats.merge(ActivityType.BREAKFAST,1,Integer::sum);
+                currentDay.activityStats.merge(ActivityType.BREAKFAST, 1, Integer::sum);
             }
-            currentDay.setStats.merge(ActivityType.EAT,1,Integer::sum);
+            currentDay.setStats.merge(ActivityType.EAT, 1, Integer::sum);
         }
-        if(ActivityType.PLAY.contains(type)){
-            currentDay.setStats.merge(ActivityType.PLAY,1,Integer::sum);
+        if (ActivityType.PLAY.contains(type)) {
+            currentDay.setStats.merge(ActivityType.PLAY, 1, Integer::sum);
         }
         currentDay.activityStats.merge(type, 1, Integer::sum);
 
-        interactionOverlay = new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage,pos);
+        interactionOverlay =
+                new InteractionOverlay(overlayText, GameConstants.OVERLAY_SECONDS_PER_HOUR * timeUsage, pos);
 
         return true;
     }
@@ -171,6 +162,7 @@ public class GameState {
     public int getTotalActivityCount(ActivityType type) {
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }
+
     public int getTotalActivityCount(EnumSet<ActivityType> type) {
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }

@@ -22,15 +22,14 @@ public class MainMenu implements Screen {
      * The {@code scene2d.ui} stage used to render this screen.
      */
     Stage stage;
+
     public static String playerName;
     TextField userName;
-
 
     public MainMenu(HeslingtonHustle game) {
 
         var camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
-
 
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
@@ -49,20 +48,18 @@ public class MainMenu implements Screen {
         userName.setDisabled(false);
         userName.setMessageText("Enter Name");
 
-
         var inner = new Table(game.skin);
 
         inner.add(userName).pad(10).width(Value.percentWidth(0.4f, inner)).height(Value.percentHeight(0.1f, inner));
         inner.row();
 
         var startButton = new TextButton("Start Game", game.skin);
-        startButton.addListener(ChangeListener.of((e, a) ->{
+        startButton.addListener(ChangeListener.of((e, a) -> {
             playerName = userName.getText();
-            if(playerName.isEmpty()) playerName = "ANON";
+            if (playerName.isEmpty()) playerName = "ANON";
             userName.setDisabled(true);
-            game.setState(HeslingtonHustle.State.PLAYING);}
-
-        ));
+            game.setState(HeslingtonHustle.State.PLAYING);
+        }));
         inner.add(startButton).pad(10).width(Value.percentWidth(0.4f, inner)).height(Value.percentHeight(0.1f, inner));
 
         inner.row();

@@ -1,7 +1,6 @@
 package io.github.uoyeng1g6.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -40,7 +39,6 @@ public class EndScreen implements Screen {
 
     LeaderBoard leaderboard;
 
-
     public EndScreen(HeslingtonHustle game, GameState endGameState) {
         camera = new OrthographicCamera();
         var viewport = new FitViewport(GameConstants.WORLD_WIDTH * 10, GameConstants.WORLD_HEIGHT * 10, camera);
@@ -52,7 +50,6 @@ public class EndScreen implements Screen {
         float finalScore = calculateExamScore(endGameState);
         leaderboard.insert(MainMenu.playerName, finalScore);
 
-
         var root = new Table(game.skin);
         root.setFillParent(true);
         root.pad(0.25f);
@@ -60,37 +57,33 @@ public class EndScreen implements Screen {
         root.setDebug(game.debug);
         stage.addActor(root);
 
-        root.add("                                                                          Game Over").getActor().setFontScale(2);
+        root.add("                                                                          Game Over")
+                .getActor()
+                .setFontScale(2);
         root.row();
 
-
-        var leader= new Table(game.skin);
+        var leader = new Table(game.skin);
         leader.add("                        LEADERBOARD");
         leader.row();
         leader.add(System.lineSeparator());
         leader.row();
-        for(int x = 0;x<10;x++){
+        for (int x = 0; x < 10; x++) {
 
             leader.add(leaderboard.show(x)[0]);
             leader.add(leaderboard.show(x)[1]);
             leader.row();
-
         }
 
-        String streakMessage= "";
-        if(endGameState.streaks[0])streakMessage+="   FEEDER   ";
-        if(endGameState.streaks[1])streakMessage+="   WALKER   ";
-        if(endGameState.streaks[2])streakMessage+="   BOOKWORM   ";
-        if(endGameState.streaks[3])streakMessage+="   ALCOHOLIC   ";
-        if(endGameState.streaks[4])streakMessage+="   FAST BREAKER   ";
-
-
+        String streakMessage = "";
+        if (endGameState.streaks[0]) streakMessage += "   FEEDER   ";
+        if (endGameState.streaks[1]) streakMessage += "   WALKER   ";
+        if (endGameState.streaks[2]) streakMessage += "   BOOKWORM   ";
+        if (endGameState.streaks[3]) streakMessage += "   ALCOHOLIC   ";
+        if (endGameState.streaks[4]) streakMessage += "   FAST BREAKER   ";
 
         var inner = new Table(game.skin);
 
-
-        inner.add(String.format("Exam Score: %.2f / 100", finalScore))
-                .padBottom(50);
+        inner.add(String.format("Exam Score: %.2f / 100", finalScore)).padBottom(50);
         inner.row();
         inner.add("Times Studied: " + endGameState.getTotalActivityCount(ActivityType.WORK));
         inner.row();
@@ -154,7 +147,7 @@ public class EndScreen implements Screen {
      */
     float calculateExamScore(GameState state) {
 
-        List<GameState.Day>days  = state.days;
+        List<GameState.Day> days = state.days;
         float totalScore = 0;
 
         for (var day : days) {
@@ -170,10 +163,9 @@ public class EndScreen implements Screen {
             totalScore += (float) (normalisedDayScore * (1 / 7f));
         }
 
-        for(int x =0;x<5;x++){
-             totalScore += state.streaks[x] ? 5 : 0;
-      }
-
+        for (int x = 0; x < 5; x++) {
+            totalScore += state.streaks[x] ? 5 : 0;
+        }
 
         // Clamp total score from 0-100
         return Math.min(100, Math.max(0, totalScore));
@@ -183,7 +175,6 @@ public class EndScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
 
-
         stage.act();
         stage.draw();
     }
@@ -192,8 +183,6 @@ public class EndScreen implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
-
-
 
     @Override
     public void show() {}

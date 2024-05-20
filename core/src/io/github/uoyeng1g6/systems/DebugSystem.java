@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
 import io.github.uoyeng1g6.components.AnimationComponent;
 import io.github.uoyeng1g6.components.FixtureComponent;
@@ -16,9 +15,8 @@ import io.github.uoyeng1g6.components.HitboxComponent;
 import io.github.uoyeng1g6.components.InteractionComponent;
 import io.github.uoyeng1g6.components.PlayerComponent;
 import io.github.uoyeng1g6.constants.PlayerConstants;
-import space.earlygrey.shapedrawer.ShapeDrawer;
-
 import java.awt.*;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 /**
  * System that handles drawing hitboxes around interactable objects and the player if

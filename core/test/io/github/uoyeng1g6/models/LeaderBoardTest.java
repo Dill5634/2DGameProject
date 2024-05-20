@@ -1,7 +1,7 @@
 package io.github.uoyeng1g6.models;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.io.File;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LeaderBoardTest {
@@ -9,6 +9,8 @@ class LeaderBoardTest {
     LeaderBoard myLeaderBoard;
     @BeforeEach
     void setUp(){
+        File temp = new File("leaderboard.txt");
+        temp.delete();
         myLeaderBoard = new LeaderBoard();
     }
 

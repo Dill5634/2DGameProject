@@ -12,6 +12,9 @@ import java.util.HashMap;
  */
 public class GameState {
 
+
+
+
     /**
      * Dataclass representing a single in-game day.
      */
@@ -63,7 +66,8 @@ public class GameState {
     /**
      * The days that have already been completed.
      */
-    public final ArrayList<Day> days = new ArrayList<>(7);
+    public final ArrayList<Day> days = new ArrayList<>(8);
+
     /**
      * The day that is currently in progress.
      */
@@ -81,6 +85,8 @@ public class GameState {
      * The number of hours remaining to perform activities for the current day.
      */
     public int hoursRemaining = GameConstants.MAX_HOURS;
+
+    private boolean studyCatchUp = false;
 
     /**
      * The currently displayed overlay.
@@ -128,13 +134,64 @@ public class GameState {
             interactionOverlay = new InteractionOverlay("NO ENERGY!!!", 0.5f, pos);
             return false;
         }
-        System.out.println();
+
+
+        if(ActivityType.WORK.contains(type) && currentDay.setStats.containsKey(ActivityType.WORK)){
+
+            if(currentDay.setStats.get(ActivityType.WORK) == 2){
+                interactionOverlay = new InteractionOverlay("YOU'VE STUDIED TWICE TODAY!!!", 1f, pos);
+                return false;
+            }
+
+
+
+
+             if(currentDay.setStats.get(ActivityType.WORK) == 1){
+
+                 if(getTotalActivityCount(ActivityType.WORK)  < days.size()+1){
+
+                     if(studyCatchUp){
+                         interactionOverlay = new InteractionOverlay("TRIED TO CATCH UP ALREADY", 1f, pos);
+                         return false;
+                     }
+
+                     interactionOverlay = new InteractionOverlay("Studying... again", 1f, pos);
+                     currentDay.activityStats.merge(ActivityType.BREAKFAST, 1, Integer::sum);
+                     studyCatchUp = true;
+                     return false;
+
+                 }
+
+
+                     interactionOverlay = new InteractionOverlay("ALREADY STUDIED TODAY", 1f, pos);
+                     return false;
+
+
+
+
+             }
+
+
+
+
+
+
+
+        }
+
+
+
         hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
 
-        if (ActivityType.WORK.contains(type)) {
+
+        if(ActivityType.WORK.contains(type)){
             currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
+
+
+
         }
+
         if (ActivityType.EAT.contains(type)) {
             if (currentDay.activityStats.isEmpty()) {
 
@@ -160,10 +217,12 @@ public class GameState {
      * @return the total number of activities of that type done.
      */
     public int getTotalActivityCount(ActivityType type) {
+
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }
 
     public int getTotalActivityCount(EnumSet<ActivityType> type) {
+
         return days.stream().mapToInt(day -> day.statFor(type)).sum() + currentDay.statFor(type);
     }
 }

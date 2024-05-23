@@ -362,7 +362,7 @@ public class Playing implements Screen {
                 .add(new HitboxComponent(new Rectangle(
                         16, 16, popcornIcon.getRegionWidth() * iconSize, popcornIcon.getRegionHeight() * iconSize)))
                 .add(new InteractionComponent(state -> {
-                    if (!state.doActivity(1, 10, ActivityType.WALK, "Feeding ducks...", ref.getCameraPosition())) {
+                    if (!state.doActivity(1, 10, ActivityType.DUCKS, "Feeding ducks...", ref.getCameraPosition())) {
                         // Notify insufficient time/energy
                     }
                 }))

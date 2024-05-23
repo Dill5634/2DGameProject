@@ -109,6 +109,7 @@ public class GameState {
         hoursRemaining = GameConstants.MAX_HOURS;
         days.add(currentDay);
         currentDay = new Day();
+        interactionOverlay = new InteractionOverlay("SLEEPING!!!", 2f, camPosition);
     }
 
     /**

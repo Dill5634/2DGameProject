@@ -1,0 +1,10 @@
+Steve 88.14286
+Jeff 63.14286
+Lilith 53.000004
+Tom 48.285717
+Jeff 28.57143
+Katie 7.4285717
+Steve 6.8571434
+Peter123 6.8571434
+null 0.0
+null 0.0

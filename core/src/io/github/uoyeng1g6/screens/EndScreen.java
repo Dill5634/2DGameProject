@@ -119,7 +119,6 @@ public class EndScreen implements Screen {
 
         studyPoints = 50 * studyCount;
 
-
         studyPoints = Math.max(0, studyPoints);
 
         // Calculate meal multiplier

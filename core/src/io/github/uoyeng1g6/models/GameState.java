@@ -12,9 +12,6 @@ import java.util.HashMap;
  */
 public class GameState {
 
-
-
-
     /**
      * Dataclass representing a single in-game day.
      */
@@ -135,58 +132,38 @@ public class GameState {
             return false;
         }
 
+        if (ActivityType.WORK.contains(type) && currentDay.setStats.containsKey(ActivityType.WORK)) {
 
-        if(ActivityType.WORK.contains(type) && currentDay.setStats.containsKey(ActivityType.WORK)){
-
-            if(currentDay.setStats.get(ActivityType.WORK) == 2){
+            if (currentDay.setStats.get(ActivityType.WORK) == 2) {
                 interactionOverlay = new InteractionOverlay("YOU'VE STUDIED TWICE TODAY!!!", 1f, pos);
                 return false;
             }
 
+            if (currentDay.setStats.get(ActivityType.WORK) == 1) {
 
+                if (getTotalActivityCount(ActivityType.WORK) < days.size() + 1) {
 
+                    if (studyCatchUp) {
+                        interactionOverlay = new InteractionOverlay("TRIED TO CATCH UP ALREADY", 1f, pos);
+                        return false;
+                    }
 
-             if(currentDay.setStats.get(ActivityType.WORK) == 1){
+                    interactionOverlay = new InteractionOverlay("Studying... again", 1f, pos);
+                    currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
+                    currentDay.activityStats.merge(type, 1, Integer::sum);
+                    studyCatchUp = true;
+                    return false;
+                }
 
-                 if(getTotalActivityCount(ActivityType.WORK)  < days.size()+1){
-
-                     if(studyCatchUp){
-                         interactionOverlay = new InteractionOverlay("TRIED TO CATCH UP ALREADY", 1f, pos);
-                         return false;
-                     }
-
-                     interactionOverlay = new InteractionOverlay("Studying... again", 1f, pos);
-                     currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
-                     currentDay.activityStats.merge(type, 1, Integer::sum);
-                     studyCatchUp = true;
-                     return false;
-
-                 }
-
-
-                     interactionOverlay = new InteractionOverlay("ALREADY STUDIED TODAY", 1f, pos);
-                     return false;
-
-
-
-
-             }
-
-
-
-
-
-
-
+                interactionOverlay = new InteractionOverlay("ALREADY STUDIED TODAY", 1f, pos);
+                return false;
+            }
         }
-
-
 
         hoursRemaining -= timeUsage;
         energyRemaining -= energyUsage;
 
-
-        if(ActivityType.WORK.contains(type)){
+        if (ActivityType.WORK.contains(type)) {
             currentDay.setStats.merge(ActivityType.WORK, 1, Integer::sum);
         }
 
